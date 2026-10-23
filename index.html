@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<title>李锐冲 Li Ruichong — Portfolio 2026</title>
+<!-- Offline build: local sans-serif stack, no blocking font requests. -->
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#82F046;--green-bright:#A8FF78;--green-dark:#5AAE28;
+  --bg:#82F046;
+  --paper:#F6F4F1;--text:#1A1A1A;--text-light:#555;--text-dim:#888;
+  --line:rgba(0,0,0,.08);--hero-ghost:rgba(0,0,0,.1);
+  --project-color:#82F046;--project-paper:#F5F7F2;--project-on:#111511;
+  --display:'Outfit','Noto Sans SC','PingFang SC',sans-serif;--body:'Sora','Noto Sans SC','PingFang SC',sans-serif;--cn:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);--ease-out:cubic-bezier(.33,1,.68,1);
+  --card-w:170px;--card-gap:18px;--card-step:188px;
+}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--body);background:#111;color:var(--text);overflow-x:hidden}
+body.is-transitioning{overflow:hidden;touch-action:none}
+img{max-width:100%;display:block} a{color:inherit;text-decoration:none}
+::selection{background:var(--green);color:#000}
+body.lang-en .cn{display:none!important} body.lang-cn .en{display:none!important}
+
+/* Native cursor everywhere; it is replaced by the VIEW disc only over project cards. */
+.cursor-ring,.cursor-dot{display:none;position:fixed;left:0;top:0;pointer-events:none;z-index:1400;will-change:left,top,width,height,background-color}
+body.has-playful-cursor [contenteditable="true"]{cursor:text}
+body.has-playful-cursor .gcard,body.has-playful-cursor .gcard *{cursor:none}
+body.has-playful-cursor .cursor-ring.is-project{display:grid;place-items:center}
+.cursor-ring{width:76px;height:76px;border:0;border-radius:50%;transform:translate(-50%,-50%);transition:width .22s var(--ease),height .22s var(--ease),background .2s,color .2s;color:var(--cursor-on,#fff);font:700 9px/1 var(--display);letter-spacing:.12em;background:var(--cursor-accent,#111);box-shadow:0 14px 34px rgba(0,0,0,.18)}
+.cursor-dot{display:none!important}
+.cursor-ring::after{content:'VIEW';opacity:1;transform:scale(1)}
+.cursor-ring.is-pressed{width:62px;height:62px}
+
+/* Shared-element project transition lives outside the clipped hero */
+.project-transition{position:fixed;inset:0;z-index:1300;pointer-events:none;visibility:hidden;overflow:hidden}
+.project-transition.is-active{visibility:visible}
+.project-transition__card{position:fixed!important;margin:0!important;translate:none!important;transform:none!important;overflow:hidden;box-shadow:0 28px 90px rgba(0,0,0,.28)!important;will-change:left,top,width,height,border-radius,opacity}
+.project-transition__card .gcard-img{height:100%}
+.project-transition__card .gcard-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.04)}
+.project-transition__card .gcard-info{position:absolute;left:0;right:0;bottom:0;opacity:0}
+.project-transition__card .gcard-tags{display:none}
+.project-transition__veil{position:absolute;inset:0;opacity:0;background:var(--project-color);will-change:opacity}
+.project-transition__word{position:absolute;left:5vw;bottom:5vh;color:var(--project-on);font:800 clamp(12px,1.2vw,18px)/1 var(--display);letter-spacing:.22em;text-transform:uppercase;opacity:0}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;transition:background .5s,backdrop-filter .5s}
+.nav.scrolled{background:rgba(17,17,17,.92);backdrop-filter:blur(20px)}
+.nav-logo{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(0,0,0,.7)}
+.nav.scrolled .nav-logo{color:#fff}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,0,0,.5);transition:color .3s}
+.nav.scrolled .nav-links a{color:rgba(255,255,255,.6)}
+.nav-links a:hover{color:rgba(0,0,0,.9)}
+.nav.scrolled .nav-links a:hover{color:var(--green)}
+.lang-btn{font-family:var(--body);font-size:10px;font-weight:600;cursor:pointer;background:rgba(0,0,0,.1);border:1px solid rgba(0,0,0,.15);color:rgba(0,0,0,.7);padding:5px 16px;border-radius:20px;transition:all .3s}
+.nav.scrolled .lang-btn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff}
+.lang-btn:hover{background:rgba(0,0,0,.2)}
+.nav.scrolled .lang-btn:hover{background:var(--green);border-color:var(--green);color:#000}
+
+/* ═══ HERO ═══ */
+.hero-scene{height:100dvh;min-height:700px;position:relative;overflow:hidden}
+
+/* Bright green bg + white glow */
+.hero-bg{position:absolute;inset:0;background:var(--green);z-index:0}
+.hero-bg::before{content:'';position:absolute;bottom:-20%;left:10%;width:80%;height:60%;background:radial-gradient(ellipse,rgba(255,255,255,.5) 0%,rgba(255,255,255,.2) 30%,transparent 70%);filter:blur(40px);pointer-events:none}
+.hero-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(255,255,255,.12) 0%,transparent 60%)}
+.hero-grain{position:absolute;inset:0;z-index:1;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* PORTFOLIO top center */
+.hero-title{position:absolute;top:80px;left:50%;transform:translateX(-50%);z-index:50;text-align:center}
+.hero-title h1{font-family:var(--display);font-size:clamp(56px,9vw,110px);font-weight:900;letter-spacing:.08em;color:var(--hero-ghost);line-height:1;text-transform:uppercase}
+
+/* ═══ LANYARD + BADGE (higher, no overlap with concave cards) ═══ */
+.badge-column{position:absolute;top:5%;left:50%;transform:translateX(-50%);z-index:30;display:flex;flex-direction:column;align-items:center}
+
+/* Lanyard rope */
+.lanyard-rope{width:3px;height:95px;background:linear-gradient(90deg,#222 0%,#555 25%,#777 50%,#555 75%,#222 100%);border-radius:1.5px;box-shadow:1px 2px 3px rgba(0,0,0,.3);position:relative;flex-shrink:0}
+.lanyard-rope::before{content:'';position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.15);transform:translateX(-50%)}
+
+/* Clip */
+.lanyard-clip{width:18px;height:10px;background:linear-gradient(180deg,#ccc,#999,#bbb);border-radius:2px 2px 0 0;margin-top:-1px;position:relative;flex-shrink:0;box-shadow:0 -1px 2px rgba(0,0,0,.2)}
+.lanyard-clip::after{content:'';position:absolute;bottom:-4px;left:3px;right:3px;height:4px;background:linear-gradient(180deg,#aaa,#888);border-radius:0 0 2px 2px}
+
+/* Badge: wrapper handles cursor parallax; the portrait flips away without scaling */
+.badge-stage{cursor:pointer;perspective:900px;margin-top:0;flex-shrink:0}
+.badge-wrapper{transform-style:preserve-3d}
+.badge-3d{width:220px;height:320px;position:relative;transform-style:preserve-3d;transition:transform .55s var(--ease),opacity .35s ease}
+.badge-3d.flipped{transform:rotateY(92deg)!important;opacity:0}
+.badge-face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;overflow:hidden}
+
+/* Badge Front */
+.badge-front{background:#fff;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.15),0 6px 16px rgba(0,0,0,.1)}
+.badge-photo{flex:1;overflow:hidden}
+.badge-photo img{width:100%;height:100%;object-fit:cover}
+.badge-bottom{padding:12px 16px 14px;background:#fff;position:relative}
+.badge-bottom::before{content:'';position:absolute;top:-16px;left:0;right:0;height:20px;background:#fff;border-radius:50% 50% 0 0/100% 100% 0 0}
+.badge-name{font-family:var(--display);font-size:17px;font-weight:700;color:#111;padding-top:6px}
+.badge-name-en{font-size:11px;color:#aaa;margin-top:1px;letter-spacing:.03em}
+.badge-school{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.badge-school span{font-size:8px;color:#bbb;letter-spacing:.05em}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(130,240,70,.5)}
+
+/* Click hint */
+.badge-click-hint{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;opacity:.5;transition:opacity .3s;flex-shrink:0}
+.badge-click-hint svg{width:14px;height:14px;stroke:#333;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.badge-click-hint span{font-size:9px;color:#333;letter-spacing:.08em}
+.badge-stage:hover .badge-click-hint{opacity:.8}
+
+/* ═══ INDEPENDENT EDITABLE RESUME — full information, natural proportions ═══ */
+.resume-panel{position:absolute;left:50%;top:50%;z-index:110;width:min(1180px,calc(100vw - 64px));height:min(760px,84dvh);opacity:0;pointer-events:none;transform:translate(-50%,-50%) rotateY(-82deg) scale(.96);transform-origin:center;transition:transform .62s var(--ease),opacity .3s ease;perspective:1200px}
+body.resume-open .resume-panel{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) rotateY(0deg) scale(1)}
+.resume-sheet{position:relative;width:100%;height:100%;background:#fff;padding:36px 40px 42px;box-shadow:0 32px 90px rgba(0,0,0,.22),0 10px 28px rgba(0,0,0,.1);border-radius:18px;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:var(--green) rgba(0,0,0,.06);container-type:inline-size;container-name:resume}
+.resume-sheet::after{content:'';position:sticky;display:block;left:0;right:0;bottom:-42px;height:7px;margin:34px -40px -42px;background:var(--green)}
+.resume-close{position:sticky;float:right;right:0;top:0;width:36px;height:36px;border-radius:50%;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.92);backdrop-filter:blur(12px);color:#222;font:500 21px/1 var(--display);cursor:pointer;z-index:5;transition:background .2s ease,transform .2s ease}
+.resume-close:hover{background:var(--green);transform:rotate(90deg)}
+.resume-edit-tip{position:absolute;right:84px;top:49px;font-size:10px;color:#999;letter-spacing:.08em}
+.rb-header{clear:both;margin-bottom:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;padding:0 0 18px;border-bottom:2px solid var(--green)}
+.rb-eyebrow{font-size:10px;font-weight:700;color:var(--green-dark);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px}
+.rb-name{font-family:var(--display);font-size:36px;font-weight:800;color:#111;letter-spacing:-.025em;line-height:1}
+.rb-name-en{font-size:13px;color:#777;margin-top:7px;letter-spacing:.02em}
+.rb-contact{display:flex;gap:8px 18px;font-size:11px;color:#555;flex-wrap:wrap;justify-content:flex-end;max-width:520px}
+.rb-contact span{white-space:nowrap}
+.rb-grid{display:grid;grid-template-columns:.9fr 1.05fr 1.45fr;gap:0;border:1px solid rgba(0,0,0,.08);border-radius:12px;overflow:hidden;background:#fff}
+.rb-section{padding:18px 20px;border-right:1px solid rgba(0,0,0,.07);border-bottom:1px solid rgba(0,0,0,.07)}
+.rb-section:nth-child(3n){border-right:none}
+.rb-section.rb-wide{grid-column:span 2}
+.rb-section.rb-full{grid-column:1/-1;border-right:none}
+.rb-label{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--green-dark);margin-bottom:10px}
+.rb-text{font-size:11px;line-height:1.75;color:#444}
+.rb-text p+p{margin-top:8px}
+.rb-text strong{color:#111;font-weight:650}
+.rb-text .y{display:inline-block;color:var(--text-dim);font-size:9px;margin-right:6px;letter-spacing:.03em}
+.rb-chipline{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.rb-chip{font-size:9px;line-height:1.2;padding:4px 7px;border-radius:999px;background:rgba(130,240,70,.12);border:1px solid rgba(90,174,40,.18);color:#315b1c}
+.rb-experience{display:grid;grid-template-columns:190px 1fr;gap:18px}
+.rb-role{font-size:12px;line-height:1.65;color:#111}
+.rb-role strong{font-size:13px}
+.rb-work-label{font-size:10px;font-weight:750;color:#777;margin-bottom:7px;letter-spacing:.04em}
+.rb-bullets{display:grid;gap:6px}
+.rb-bullets p{position:relative;padding-left:12px;margin:0}
+.rb-bullets p::before{content:'';position:absolute;left:0;top:.72em;width:4px;height:4px;border-radius:50%;background:var(--green-dark)}
+.rb-projects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.rb-project{padding:14px;border:1px solid rgba(0,0,0,.08);border-radius:10px;background:#fafafa}
+.rb-project-head{margin-bottom:7px;color:#111;line-height:1.5}
+.rb-project-head .y{display:block;margin-bottom:2px}
+.rb-project-tags{display:flex;flex-wrap:wrap;gap:4px;margin:7px 0}
+.rb-project-tags span{font-size:8px;padding:3px 6px;border-radius:999px;background:#111;color:#fff}
+[contenteditable="true"]{border-radius:4px;outline:0;transition:background .2s,box-shadow .2s}
+[contenteditable="true"]:hover{background:rgba(130,240,70,.08)}
+[contenteditable="true"]:focus{background:rgba(130,240,70,.13);box-shadow:0 0 0 3px rgba(130,240,70,.25)}
+@container resume (max-width:850px){.rb-grid{grid-template-columns:1fr 1fr}.rb-section:nth-child(3n){border-right:1px solid rgba(0,0,0,.07)}.rb-section:nth-child(2n){border-right:none}.rb-section.rb-wide,.rb-section.rb-full{grid-column:1/-1}.rb-projects{grid-template-columns:1fr}}
+
+/* Cursor-reactive cards use independent translate, never competing with transform animations */
+.gcard,.resume-sheet,.p-intro-col,.gal-item{--mouse-x:0px;--mouse-y:0px;translate:var(--mouse-x) var(--mouse-y)}
+@media(prefers-reduced-motion:reduce){.gcard,.resume-sheet,.p-intro-col,.gal-item{translate:none!important}}
+
+/* ═══ CAROUSEL (fixed concave arc ∪, enlarge in place) ═══ */
+.carousel-wrap{position:absolute;bottom:calc(14% + clamp(18px,3dvh,32px));left:50%;transform:translateX(-50%);z-index:20;height:250px;width:100%;transition:filter .45s ease}
+.carousel-track{position:relative;height:100%;width:100%}
+.gcard{position:absolute;cursor:pointer;will-change:transform;transform-origin:center center;transition:transform .34s var(--ease),opacity .34s ease,filter .34s ease;isolation:isolate}
+.gcard::before{content:attr(data-number);position:absolute;right:0;top:-50px;z-index:0;font:800 clamp(54px,5.2vw,82px)/1 var(--display);letter-spacing:-.08em;color:var(--hero-ghost);opacity:1;pointer-events:none;transition:transform .4s var(--ease)}
+.gcard:hover::before,.gcard:focus-visible::before{transform:translateY(-8px) scale(1.04)}
+.gcard:hover,.gcard:focus-visible{transform:scale(1.1) rotate(var(--card-rot,0deg))!important;z-index:180!important;outline:none}
+.gcard:focus-visible .gcard-glass{box-shadow:0 0 0 4px #111,0 20px 48px rgba(0,0,0,.18)}
+.gcard-glass{width:var(--card-w);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 24px rgba(0,0,0,.1),0 2px 6px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.4);transition:background .3s,border-color .3s,box-shadow .3s;position:relative;z-index:1}
+.gcard-glass::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(145deg,transparent 42%,color-mix(in srgb,var(--project-color) 8%,transparent) 70%,color-mix(in srgb,var(--project-color) 22%,transparent) 100%)}
+.gcard:hover .gcard-glass,.gcard:focus-visible .gcard-glass{background:rgba(255,255,255,.34);border-color:rgba(255,255,255,.68);box-shadow:0 20px 48px rgba(0,0,0,.18),0 5px 14px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.6)}
+/* When resume is open, dim all cards */
+body.resume-open .carousel-wrap{opacity:.12!important;filter:blur(8px)!important;pointer-events:none}
+.gcard-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25) 0%,transparent 50%);z-index:2;pointer-events:none;border-radius:14px}
+.gcard-img{width:100%;height:140px;overflow:hidden}
+.gcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .38s var(--ease)}
+.gcard:hover .gcard-img img,.gcard:focus-visible .gcard-img img{transform:scale(1.045)}
+.gcard-info{padding:12px 14px 14px;position:relative;z-index:3}
+.gcard-title{font-family:var(--display);font-size:15px;font-weight:650;color:#111;line-height:1.3;margin-bottom:6px}
+.gcard-tags{display:flex;gap:5px;flex-wrap:wrap}
+.gcard-tags span{font-size:10px;color:#303030;background:var(--project-paper);border:1px solid color-mix(in srgb,var(--project-color) 28%,transparent);padding:3px 8px;border-radius:999px;white-space:nowrap}
+
+/* Scroll cue */
+.scroll-cue{position:absolute;bottom:24px;right:48px;z-index:40;display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.2em;color:rgba(0,0,0,.3);text-transform:uppercase}
+.scroll-cue-line{width:40px;height:1px;background:rgba(0,0,0,.25);animation:sp 2s ease infinite}
+@keyframes sp{0%,100%{opacity:.2;transform:scaleX(.5)}50%{opacity:1;transform:scaleX(1)}}
+
+/* ═══ SIDEBAR NAV ═══ */
+.sidebar-nav{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:250;display:flex;flex-direction:column;gap:6px;opacity:0;pointer-events:none;transition:opacity .5s var(--ease);padding:18px 20px 18px 16px;border-radius:16px}
+.sidebar-nav::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;border:1px solid rgba(255,255,255,.06);z-index:-1}
+.sidebar-nav.visible{opacity:1;pointer-events:auto}
+.sb-item{display:flex;align-items:center;gap:10px;padding:7px 10px;cursor:pointer;text-decoration:none;transition:all .3s ease;border-radius:8px}
+.sb-item:hover{background:rgba(255,255,255,.04)}
+.sb-item.active{background:rgba(130,240,70,.06)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .35s var(--ease);flex-shrink:0}
+.sb-item.active .sb-dot{background:var(--active-project-color,var(--green));box-shadow:0 0 10px color-mix(in srgb,var(--active-project-color,var(--green)) 58%,transparent);transform:scale(1.8)}
+.sb-label{font-size:11px;color:rgba(255,255,255,.35);transition:all .3s ease;white-space:nowrap;letter-spacing:.02em}
+.sb-item:hover .sb-label{color:rgba(255,255,255,.7)}
+.sb-item.active .sb-label{color:#fff;font-weight:600}
+
+/* ═══ PROJECT DETAILS — white editorial masthead + original color chapters ═══ */
+.project{position:relative;background:#f4f4f1;isolation:isolate}
+.p-header{min-height:min(860px,90dvh);position:relative;overflow:hidden;background:#f4f4f1;color:#111;padding:clamp(112px,14vh,158px) clamp(28px,5vw,82px) clamp(52px,7vh,78px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto minmax(360px,1fr) auto auto;column-gap:clamp(14px,1.6vw,26px);align-content:end;border-top:10px solid var(--project-color)}
+.p-wordmark{position:absolute;left:-.02em;right:-.04em;bottom:-.12em;z-index:0;white-space:nowrap;overflow:hidden;font:800 clamp(120px,18vw,300px)/.78 var(--display);letter-spacing:-.085em;text-transform:uppercase;color:color-mix(in srgb,var(--project-color) 18%,transparent);pointer-events:none}
+.p-num{grid-column:1/3;grid-row:1;position:relative;z-index:3;font-family:var(--display);font-size:clamp(54px,7vw,102px);font-weight:300;color:var(--project-color);line-height:.78;letter-spacing:-.07em}
+.p-kicker{grid-column:10/13;grid-row:1;position:relative;z-index:3;align-self:start;text-align:right;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#555}
+.p-cover{grid-column:8/13;grid-row:2;align-self:center;justify-self:stretch;z-index:1;height:clamp(300px,36vw,510px);overflow:visible;background:transparent}
+.p-cover img{width:100%;height:100%;object-fit:contain;filter:saturate(.96);transition:transform 1s var(--ease);background:transparent}
+#qwen .p-cover img{padding:5%}
+.gcard[data-project="qwen"] .gcard-img img{object-fit:contain;background:transparent}
+.p-header:hover .p-cover img{transform:scale(1.025)}
+.p-title{grid-column:1/9;grid-row:2;align-self:center;position:relative;z-index:3;font-family:var(--display);font-size:clamp(62px,9.3vw,150px);font-weight:800;color:#111;line-height:.84;letter-spacing:-.065em;text-wrap:balance;outline:none}
+.p-title::after{content:'';display:block;width:clamp(70px,8vw,130px);height:10px;margin-top:24px;background:var(--project-color)}
+.p-subtitle{grid-column:1/6;grid-row:3;position:relative;z-index:3;font-size:clamp(17px,1.7vw,26px);font-weight:500;line-height:1.3;color:#2f312f;margin:clamp(22px,3vh,38px) 0 0}
+.p-tags{grid-column:7/13;grid-row:3;position:relative;z-index:3;display:flex;justify-content:flex-end;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-top:clamp(22px,3vh,38px)}
+.ptag{font-size:10px;font-weight:650;letter-spacing:.12em;text-transform:uppercase;color:#111;border:1px solid rgba(0,0,0,.25);padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.65)}
+.p-client{grid-column:7/13;grid-row:4;position:relative;z-index:3;text-align:right;font-size:11px;line-height:1.6;color:#666;margin-top:14px}
+.p-body{background:#f4f4f1;color:var(--text);padding:clamp(72px,9vw,126px) clamp(20px,5vw,80px) clamp(96px,11vw,160px);border-top:1px solid rgba(0,0,0,.1)}
+.p-intro{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(18px,2vw,34px);max-width:1280px;margin:0 auto clamp(88px,11vw,150px);padding-top:20px;border-top:1px solid rgba(0,0,0,.16)}
+.p-intro-col{grid-column:3/9}
+.p-intro-right{grid-column:9/13;border-left:0;padding-left:0;align-self:start}
+.col-hd{font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#555;margin-bottom:24px}
+.col-text{font-size:clamp(14px,1.05vw,17px);line-height:1.85;color:#50524f;max-width:60ch}
+.p-intro-col:first-child .col-text{font-family:var(--cn);font-size:clamp(20px,2vw,31px);font-weight:520;line-height:1.5;letter-spacing:-.028em;max-width:34ch}
+.p-intro-col:first-child .col-text p:first-child{color:#111}
+.p-intro-col:first-child .col-text p:first-child::first-letter{color:var(--project-color)}
+body.lang-en .p-intro-col:first-child .col-text{font-family:var(--display)}
+.col-text p{margin-bottom:1em}
+.project-media{max-width:1280px;margin:0 auto}
+.section-index{display:grid;grid-template-columns:minmax(210px,2fr) repeat(auto-fit,minmax(145px,1fr));border-top:1px solid rgba(0,0,0,.16);border-left:1px solid rgba(0,0,0,.16);margin-bottom:clamp(72px,8vw,112px)}
+.section-index-label,.section-chip{min-height:82px;border-right:1px solid rgba(0,0,0,.16);border-bottom:1px solid rgba(0,0,0,.16);padding:16px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;font-size:10px;color:#41433f}
+.section-index-label{font:700 clamp(19px,2vw,28px)/1.05 var(--display);letter-spacing:-.03em;color:#111}
+.section-chip{transition:background .25s,color .25s}
+.section-chip:hover{background:var(--project-color);color:var(--project-on)}
+.section-chip b{display:grid;place-items:center;min-width:26px;height:26px;padding:0 6px;border-radius:50%;background:var(--project-color);color:var(--project-on);font:700 9px/1 var(--display)}
+.section-chip:hover b{background:var(--project-on);color:var(--project-color)}
+.project-chapter{scroll-margin-top:72px;margin-bottom:clamp(104px,11vw,156px);background:#fff}
+.chapter-band{min-height:clamp(132px,13vw,186px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(12px,1.5vw,24px);align-items:end;padding:clamp(24px,3vw,42px);background:var(--project-color);color:var(--project-on);overflow:hidden}
+.chapter-no{grid-column:1/3;font:300 clamp(50px,6vw,86px)/.76 var(--display);letter-spacing:-.07em;color:color-mix(in srgb,var(--project-on) 22%,transparent)}
+.chapter-title{grid-column:3/11;font:750 clamp(36px,4.8vw,68px)/.92 var(--display);letter-spacing:-.05em;text-wrap:balance}
+.chapter-meta{grid-column:11/13;align-self:start;text-align:right;font:650 9px/1.65 var(--display);letter-spacing:.14em;color:color-mix(in srgb,var(--project-on) 68%,transparent)}
+/* Keynote page sequence: preserve each source slide as one complete 16:9 composition. */
+.chapter-body{padding:clamp(18px,2.4vw,34px)}
+.keynote-pages{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(16px,2vw,28px);align-items:start}
+.chapter-body.keynote-pages{padding:clamp(18px,2.4vw,34px)}
+.keynote-page{min-width:0;width:100%;margin:0;overflow:visible;background:transparent}
+.keynote-page img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:transparent}
+.keynote-page:hover img{transform:none;filter:none}
+.gal-item{min-width:0;width:100%;margin:0;overflow:visible;background:transparent;align-self:start}
+.gal-item img{width:100%;height:auto;object-fit:contain}
+.sub-block{max-width:1280px;margin:0 auto 72px}
+.sub-label{font-family:var(--display);font-size:clamp(22px,2.6vw,38px);font-weight:650;line-height:1.08;letter-spacing:-.035em;color:#ddd;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sub-gallery{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-flow:dense;gap:clamp(12px,1.8vw,24px);align-items:start}
+.sub-gallery.keynote-pages{grid-template-columns:minmax(0,1fr);grid-auto-flow:row;gap:clamp(16px,2vw,28px)}
+.sub-gallery .is-wide{grid-column:span 7}
+.sub-gallery .is-standard{grid-column:span 5}
+.sub-gallery .is-portrait{grid-column:span 4}
+.gal-medium,.gal-small{height:auto}
+.gal-medium img,.gal-small img{object-fit:contain}
+.graphic{background:#1a1a1e;padding:120px 48px;color:#fff}
+.graphic-title{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
+.graphic-sub{font-size:14px;color:#888;margin-bottom:60px}
+.graphic .sub-label{color:#888;border-bottom-color:rgba(255,255,255,.08)}
+.footer{background:#111;padding:100px 48px 40px;color:#fff}
+.f-inner{max-width:1100px;margin:0 auto}
+.f-title{font-family:var(--display);font-size:clamp(32px,5vw,64px);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:48px}
+.f-title .green{color:var(--green)}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-bottom:48px}
+.f-col h4{font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-bottom:16px}
+.f-col p,.f-col a{font-size:14px;line-height:2.2;color:rgba(255,255,255,.4);display:block;transition:color .3s}
+.f-col a:hover{color:var(--green)}
+.f-bottom{padding-top:20px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.2)}
+.rt{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rt.visible{opacity:1;transform:none}
+.ri{opacity:0;transform:translateY(30px) scale(.97);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.ri.visible{opacity:1;transform:none}
+@media(min-width:901px){
+  .p-header,.p-body{padding-left:max(230px,5vw)}
+}
+@media(max-width:1180px) and (min-width:901px){
+  :root{--card-w:140px;--card-step:156px}
+  .gcard-img{height:98px}
+  .gcard-title{font-size:13px}
+  .gcard-tags span{font-size:8px;padding:3px 6px}
+}
+@media(max-width:900px){
+  .nav,.p-header,.p-body,.graphic,.footer{padding-left:24px;padding-right:24px}
+  .p-header{min-height:76dvh;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:auto minmax(300px,1fr) auto auto}
+  .p-wordmark{font-size:clamp(104px,21vw,188px);bottom:-.06em}
+  .p-num{grid-column:1/3;grid-row:1}
+  .p-kicker{grid-column:5/7;grid-row:1}
+  .p-cover{grid-column:3/7;grid-row:2;height:clamp(280px,48vw,430px)}
+  .p-title{grid-column:1/6;grid-row:2;font-size:clamp(58px,12vw,108px)}
+  .p-subtitle{grid-column:1/4;grid-row:3}
+  .p-tags{grid-column:4/7;grid-row:3}
+  .p-client{grid-column:4/7;grid-row:4}
+  .p-intro{grid-template-columns:1fr;gap:54px}
+  .p-intro-col,.p-intro-right{grid-column:1;border-left:none;padding-left:0}
+  .section-index{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .section-index-label{grid-column:span 3}
+  .chapter-band{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .chapter-no{grid-column:1/2}
+  .chapter-title{grid-column:2/6}
+  .chapter-meta{grid-column:6/7}
+  .chapter-body.series-featured{grid-template-columns:minmax(0,1fr);padding-inline:clamp(32px,8vw,72px)}
+  .chapter-body.series-standard,.chapter-body.series-compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .f-grid{grid-template-columns:1fr;gap:32px}
+  .badge-3d{width:180px;height:260px}
+  :root{--card-w:106px;--card-step:118px}
+  .gcard-img{height:72px}
+  .gcard-info{padding:8px 8px 10px}
+  .gcard-title{font-size:11px}
+  .gcard-tags{display:none}
+  .sidebar-nav{display:none}
+  .resume-panel{width:calc(100vw - 32px);height:86dvh;top:50%}
+  .resume-sheet{padding:28px 24px 36px}
+  .resume-sheet::after{margin-left:-24px;margin-right:-24px}
+  .rb-header{grid-template-columns:1fr;align-items:start;gap:12px}
+  .rb-contact{justify-content:flex-start}
+  .rb-experience{grid-template-columns:1fr;gap:12px}
+}
+@media(max-width:600px){
+  .nav{padding:14px 18px;gap:12px}
+  .nav-logo{font-size:10px;white-space:nowrap}
+  .nav-links{gap:12px;flex:1;justify-content:center}
+  .nav-links a{font-size:9px;letter-spacing:0;white-space:nowrap}
+  .lang-btn{white-space:nowrap;padding:7px 10px}
+  .hero-title h1{font-size:clamp(32px,12vw,56px)}
+  .carousel-wrap{display:none}
+  .p-header{min-height:760px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:0;padding-top:96px;padding-bottom:38px}
+  .p-wordmark{font-size:clamp(92px,30vw,138px);bottom:-.02em}
+  .p-num{font-size:70px;margin-bottom:22px}
+  .p-kicker{position:absolute;right:20px;top:94px}
+  .p-cover{order:2;width:82%;height:min(56vw,250px);align-self:flex-end;margin:0 0 24px}
+  .p-title{order:3;font-size:clamp(44px,14vw,72px);line-height:.9;max-width:95%}
+  .p-title::after{height:7px;margin-top:17px}
+  .p-subtitle{order:4;font-size:16px;margin-top:24px}
+  .p-tags{order:5;justify-content:flex-start;margin-top:20px}
+  .p-client{order:6;text-align:left;margin-top:12px}
+  .p-body{padding-top:62px;padding-bottom:72px}
+  .p-intro{margin-bottom:68px;gap:40px}
+  .p-intro-col:first-child .col-text{font-size:19px}
+  .section-index{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:64px}
+  .section-index-label{grid-column:span 2;min-height:68px}
+  .section-chip{min-height:68px;padding:13px}
+  .project-chapter{margin-bottom:76px}
+  .chapter-band{min-height:138px;grid-template-columns:56px minmax(0,1fr);grid-template-rows:1fr auto;gap:10px;padding:18px;align-items:end}
+  .chapter-no{grid-column:1;grid-row:1/3;font-size:50px;align-self:end}
+  .chapter-title{grid-column:2;grid-row:1;font-size:clamp(32px,9.5vw,44px);line-height:.94;align-self:end}
+  .chapter-meta{grid-column:2;grid-row:2;text-align:left;align-self:end}
+  .chapter-body{grid-auto-flow:row;gap:12px;padding:16px}
+  .chapter-body.series-featured,.chapter-body.series-standard{grid-template-columns:minmax(0,1fr)}
+  .chapter-body.series-compact{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .chapter-body.is-single{grid-template-columns:minmax(0,1fr);padding-inline:16px}
+  .chapter-lead,.chapter-thumb{grid-column:auto;width:100%}
+  .chapter-body .gal-item img{max-height:none}
+  .sub-block{margin-bottom:64px}
+  .sub-label{font-size:26px;margin-bottom:24px}
+  .sub-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .sub-gallery .is-wide{grid-column:1/-1}
+  .sub-gallery .is-standard,.sub-gallery .is-portrait{grid-column:span 1}
+  .gal-medium,.gal-small{height:auto}
+  .resume-panel{width:calc(100vw - 20px);height:82dvh;top:53%}
+  .resume-sheet{padding:22px 16px 30px;border-radius:14px}
+  .resume-sheet::after{margin-left:-16px;margin-right:-16px}
+  .resume-edit-tip{display:none}
+  .rb-name{font-size:29px}
+  .rb-grid{grid-template-columns:1fr}
+  .rb-section,.rb-section:nth-child(2n),.rb-section:nth-child(3n){grid-column:1;border-right:none}
+  .rb-section.rb-wide,.rb-section.rb-full{grid-column:1}
+  .rb-projects{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.project-transition{display:none!important}}
+@media (hover:none) and (pointer:coarse){.gcard,.resume-sheet,.p-intro-col,.gal-item{translate:none!important}}
+
+/* v3.11 typography refinement: independent text/image cells, readable leading. */
+:root{--page-gutter:clamp(24px,4.5vw,72px);--nav-offset:90px}
+body{line-height:1.6}
+.p-title,.p-subtitle,.p-client,.chapter-title,.chapter-meta,.col-text,.sub-label,.f-title{min-width:0;overflow-wrap:anywhere}
+.p-title,.chapter-title,.sub-label,.f-title{word-break:normal}
+.title-unit{display:inline-block;white-space:nowrap;vertical-align:top;max-width:100%}
+.hero-scene{min-height:820px}
+.hero-title{width:calc(100% - 48px);max-width:1000px;z-index:10}
+.hero-title h1{font-weight:700;font-size:clamp(44px,8.4vw,108px);line-height:1.15;letter-spacing:.055em}
+.badge-name{line-height:1.4}
+.badge-name-en{line-height:1.5}
+.badge-school{flex-wrap:wrap;gap:4px 12px;line-height:1.5}
+.badge-school span{font-size:9px}
+.gcard-title{font-weight:600;line-height:1.5;letter-spacing:0;overflow-wrap:anywhere;margin-bottom:9px}
+.gcard-info{padding:13px 13px 16px}
+.gcard-tags{gap:6px}
+.gcard-tags span{line-height:1.4;letter-spacing:0}
+.nav{gap:24px;padding-top:12px;padding-bottom:12px;min-height:68px}
+.nav-logo{line-height:1.4;flex-shrink:0}
+.nav-links{align-items:center}
+.nav-links a{font-size:12px;line-height:1.4;display:flex;align-items:center;min-height:44px}
+.lang-btn{font-size:12px;line-height:1.4;min-height:40px;white-space:nowrap;flex-shrink:0}
+.sidebar-nav{left:20px;width:208px;padding:14px 12px;gap:3px;max-height:calc(100dvh - 148px);overflow-y:auto;scrollbar-width:thin}
+.sb-item{min-width:0;min-height:44px;padding:9px 10px;gap:10px;align-items:center}
+.sb-label{min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:13px;line-height:1.5;letter-spacing:0;color:rgba(255,255,255,.76)}
+.sb-item.active .sb-label{font-weight:600}
+
+.p-header{container-type:inline-size;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto auto auto auto auto;column-gap:clamp(24px,3vw,48px);row-gap:26px;min-height:0;align-content:start;padding:116px var(--page-gutter) 30px}
+.p-num{grid-column:1/4;grid-row:1;line-height:1;font-size:clamp(48px,6vw,80px);letter-spacing:-.035em}
+.p-kicker{grid-column:9/13;grid-row:1;align-self:center;line-height:1.6;font-size:11px;letter-spacing:.15em}
+.p-title{grid-column:1/8;grid-row:2;align-self:center;font-size:clamp(44px,7.8cqi,100px);font-weight:650;line-height:1.22;letter-spacing:0;max-width:100%;margin:0;text-wrap:pretty}
+body.lang-en .p-title{font-size:clamp(36px,6.3cqi,80px);line-height:1.16;letter-spacing:-.02em;hyphens:manual}
+.p-title::after{height:7px;width:clamp(56px,7vw,104px);margin-top:26px}
+.p-cover{grid-column:8/13;grid-row:2;min-width:0;width:100%;height:auto;aspect-ratio:1.12;max-height:440px;align-self:center;overflow:hidden}
+.p-cover img{object-fit:contain;max-width:100%;max-height:100%;transform:none}
+.p-header:hover .p-cover img{transform:none}
+.p-subtitle{grid-column:1/8;grid-row:3;font-size:clamp(17px,1.6vw,23px);line-height:1.6;font-weight:450;margin:8px 0 0;letter-spacing:0}
+.p-tags{grid-column:8/13;grid-row:3;align-self:start;align-items:flex-start;justify-content:flex-start;gap:8px;margin:8px 0 0}
+.ptag{max-width:100%;font-size:11px;font-weight:550;letter-spacing:.03em;line-height:1.5;padding:6px 11px;overflow-wrap:anywhere}
+.p-client{grid-column:1/-1;grid-row:4;line-height:1.85;font-size:13px;text-align:left;margin:0;max-width:80ch}
+/* The decorative wordmark has its own row, never behind readable metadata. */
+.p-wordmark{position:relative;inset:auto;grid-column:1/-1;grid-row:5;display:block;min-width:0;width:100%;margin:12px 0 0;font-size:clamp(70px,11cqi,150px);font-weight:700;line-height:1.1;letter-spacing:-.035em;white-space:nowrap;overflow:hidden;color:color-mix(in srgb,var(--project-color) 18%,transparent)}
+.p-body{padding:80px var(--page-gutter) 110px}
+.p-intro{grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(28px,4vw,64px);margin-bottom:80px;padding-top:28px}
+.p-intro-col{grid-column:1/8;min-width:0;translate:none!important}
+.p-intro-right{grid-column:9/13}
+.col-hd{font-size:12px;font-weight:600;line-height:1.6;letter-spacing:.12em;margin-bottom:24px}
+.col-text{font-size:16px;line-height:1.9;letter-spacing:0;max-width:62ch}
+.p-intro-col:first-child .col-text{font-size:clamp(19px,1.65vw,25px);font-weight:400;line-height:1.8;letter-spacing:0;max-width:42ch}
+.col-text p{margin-bottom:1.2em}
+.section-index{grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr));margin-bottom:64px}
+.section-index-label{grid-column:1/-1;min-height:60px;font-size:21px;line-height:1.45;letter-spacing:0;align-items:center}
+.section-chip{min-width:0;min-height:90px;padding:18px 16px;align-items:center;font-size:14px;line-height:1.55;gap:12px}
+.chip-label{min-width:0;overflow-wrap:anywhere}
+.section-chip b{flex-shrink:0;font-size:11px;min-width:28px;height:28px}
+.label-primary,.label-secondary{display:block}
+.label-secondary{margin-top:8px;font-size:.47em;line-height:1.55;letter-spacing:.02em;font-weight:450;opacity:.8}
+.section-chip .label-secondary{font-size:11px;margin-top:4px;letter-spacing:0}
+.project-chapter{scroll-margin-top:var(--nav-offset);margin-bottom:80px}
+.chapter-band{grid-template-columns:64px minmax(0,1fr) 94px;gap:28px;min-height:156px;padding:32px;align-items:center}
+.chapter-no{grid-column:1;grid-row:1;font-size:64px;line-height:1;letter-spacing:-.035em;align-self:start}
+.chapter-title{grid-column:2;grid-row:1;font-size:clamp(30px,3.4vw,48px);font-weight:600;line-height:1.3;letter-spacing:0;align-self:center;text-wrap:pretty}
+.chapter-meta{grid-column:3;grid-row:1;align-self:start;font-size:11px;line-height:1.8;letter-spacing:.05em}
+.chapter-body.keynote-pages{padding:clamp(12px,1.5vw,24px);gap:clamp(18px,2vw,30px)}
+.sub-label{font-weight:550;line-height:1.45;letter-spacing:0}
+.graphic-title{font-weight:650;line-height:1.35;letter-spacing:0}
+.f-title{font-weight:650;line-height:1.25;letter-spacing:0}
+.f-bottom{flex-wrap:wrap;gap:12px 28px;line-height:1.6}
+.resume-sheet{translate:none!important}
+.rb-name{line-height:1.25;letter-spacing:0}
+.rb-name-en{line-height:1.65}
+.rb-section,.rb-header>div,.rb-project{min-width:0}
+.rb-header{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.rb-contact{font-size:12px;line-height:1.7;max-width:100%}
+.rb-contact span{white-space:normal;overflow-wrap:anywhere}
+.rb-text{font-size:13px;line-height:1.85;overflow-wrap:anywhere}
+.rb-label{font-size:11px;line-height:1.7}
+.rb-role{font-size:13px;line-height:1.8}
+.rb-work-label{line-height:1.6}
+.rb-project-head{line-height:1.7;overflow-wrap:anywhere}
+/* GSAP owns reveal transforms; CSS must not interpolate them a second time. */
+.rt,.ri{transition:none}
+a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+@media(min-width:1201px){
+ .p-header,.p-body,.graphic,.footer{padding-left:max(260px,calc((100vw - 1440px)/2 + 260px));padding-right:var(--page-gutter)}
+}
+@media(max-width:1200px){
+ .sidebar-nav{display:none}
+ .p-header,.p-body{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+}
+@media(max-width:900px){
+ .hero-scene{min-height:760px}
+ .gcard-info{padding:10px 8px 12px}
+ .gcard-title{font-size:12px;line-height:1.5}
+ .p-header{padding-top:104px;grid-template-columns:repeat(12,minmax(0,1fr));row-gap:24px;column-gap:24px}
+ .p-num{grid-column:1/4;grid-row:1}
+ .p-kicker{grid-column:9/13;grid-row:1}
+ .p-title{grid-column:1/8;grid-row:2}
+ .p-cover{grid-column:8/13;grid-row:2}
+ .p-subtitle{grid-column:1/8;grid-row:3}
+ .p-tags{grid-column:8/13;grid-row:3}
+ .p-client{grid-column:1/-1;grid-row:4}
+ .p-intro{grid-template-columns:minmax(0,1fr);gap:36px}
+ .p-intro-col,.p-intro-right{grid-column:1}
+ .p-intro-col:first-child .col-text{font-size:21px;line-height:1.8;max-width:48ch}
+ .p-intro-right{padding-top:24px;border-top:1px solid rgba(0,0,0,.12)}
+ .section-index{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .section-index-label{grid-column:1/-1}
+ .chapter-band{grid-template-columns:52px minmax(0,1fr) 80px;gap:22px;padding:28px}
+ .chapter-no{font-size:52px;grid-column:1}
+ .chapter-title{grid-column:2}
+ .chapter-meta{grid-column:3}
+ .rb-header{grid-template-columns:minmax(0,1fr)}
+ .rb-contact{justify-content:flex-start}
+}
+@media(max-width:600px){
+ :root{--nav-offset:116px}
+ .nav{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 16px;padding:8px 20px 4px;min-height:96px}
+ .nav-logo{font-size:11px;letter-spacing:.1em;grid-column:1;grid-row:1}
+ .lang-btn{grid-column:2;grid-row:1;min-height:40px;font-size:11px;padding:6px 12px}
+ .nav-links{grid-column:1/-1;grid-row:2;justify-content:space-between;gap:8px}
+ .nav-links a{font-size:12px;line-height:1.4;min-height:44px}
+ .hero-scene{min-height:720px}
+ .hero-title{top:118px;width:calc(100% - 40px)}
+ .hero-title h1{font-size:clamp(30px,9.4vw,56px);line-height:1.2;letter-spacing:.05em}
+ .badge-column{top:130px}
+ .p-header{padding:128px 24px 28px;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto auto auto auto auto;gap:24px 12px;min-height:0}
+ .p-num{grid-column:1;grid-row:1;order:0;font-size:52px;margin:0}
+ .p-kicker{position:static;grid-column:2;grid-row:1;order:0;font-size:10px;line-height:1.6;max-width:110px}
+ .p-cover{grid-column:1/-1;grid-row:2;order:0;width:100%;height:auto;aspect-ratio:1.55;max-height:300px;margin:0;align-self:center}
+ .p-title{grid-column:1/-1;grid-row:3;order:0;font-size:clamp(36px,10.5cqi,48px);line-height:1.24;max-width:100%;margin:0}
+ body.lang-en .p-title{font-size:clamp(30px,9.2cqi,44px);line-height:1.18;letter-spacing:-.01em}
+ .p-title::after{height:6px;margin-top:22px}
+ .p-subtitle{grid-column:1/-1;grid-row:4;order:0;font-size:17px;line-height:1.65;margin:0}
+ .p-tags{grid-column:1/-1;grid-row:5;order:0;margin:0;justify-content:flex-start}
+ .p-client{grid-column:1/-1;grid-row:6;order:0;font-size:12px;line-height:1.85;margin:0}
+ .p-wordmark{grid-column:1/-1;grid-row:7;font-size:clamp(54px,16cqi,82px);line-height:1.1;margin:0}
+ .p-body{padding:48px 24px 64px}
+ .p-intro{margin-bottom:52px;gap:28px}
+ .col-hd{margin-bottom:18px}
+ .p-intro-col:first-child .col-text{font-size:18px;line-height:1.85}
+ .col-text{font-size:15px;line-height:1.9}
+ .section-index{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:48px}
+ .section-index-label{grid-column:1/-1;min-height:60px;font-size:20px}
+ .section-chip{min-height:94px;padding:14px 12px;font-size:13px;gap:8px}
+ .section-chip b{min-width:24px;height:24px;font-size:10px}
+ .project-chapter{margin-bottom:52px}
+ .chapter-band{grid-template-columns:38px minmax(0,1fr);grid-template-rows:auto auto;gap:14px 16px;padding:22px 18px;min-height:0;align-items:start}
+ .chapter-no{grid-column:1;grid-row:1;font-size:38px;line-height:1.1;align-self:start}
+ .chapter-title{grid-column:2;grid-row:1;font-size:clamp(25px,6.8vw,31px);line-height:1.4;align-self:start}
+ .chapter-meta{grid-column:2;grid-row:2;text-align:left;font-size:10px;line-height:1.8;align-self:start}
+ .label-secondary{font-size:15px;line-height:1.6;margin-top:6px}
+ .chapter-body.keynote-pages{padding:10px;gap:16px}
+ .graphic,.footer{padding-left:24px;padding-right:24px}
+ .sub-label{font-size:24px;line-height:1.5}
+ .f-title{font-size:34px;line-height:1.3}
+ .resume-panel{top:55%;height:76dvh}
+ .rb-text{font-size:13px}
+ .rb-name{font-size:28px}
+}
+/* PingFang's Latin/CJK font boxes exceed 1.3em: reserve real ascent/descent space. */
+.p-title,body.lang-en .p-title{line-height:1.48}
+.chapter-title,.sub-label,.f-title{line-height:1.5}
+@media(prefers-reduced-motion:reduce){
+ .rt,.ri{opacity:1!important;transform:none!important}
+}
+
+</style>
+<style id="portfolio-1023-refinements">/* 1023: restrained vertical ink gradient and editorial project numbering. */
+:root{--card-w:164px;--card-step:196px;--card-gap:30px}
+.carousel-wrap{left:0;transform:none}
+.hero-title{top:76px;max-width:1200px;width:calc(100% - 64px);z-index:10}
+.hero-title h1{font-family:'Arial Black','Helvetica Neue',var(--display);font-size:clamp(64px,10.4vw,150px);font-weight:900;line-height:1.1;letter-spacing:-.045em;color:#42842e;background:linear-gradient(180deg,rgba(25,73,22,.66) 5%,rgba(50,111,32,.36) 48%,rgba(87,154,48,.08) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge-click-hint{gap:8px;margin-top:16px;min-height:40px;padding:7px 15px;border-radius:999px;opacity:1;background:rgba(255,255,255,.25);border:1px solid rgba(29,73,15,.2);box-shadow:0 2px 6px rgba(21,72,12,.04)}
+.badge-click-hint svg{width:21px;height:21px;stroke:#244919;stroke-width:1.9;flex-shrink:0}
+.badge-click-hint span{font-size:13px;font-weight:600;line-height:1.5;letter-spacing:.035em;color:#244919}
+.badge-stage:hover .badge-click-hint,.badge-stage:focus-visible .badge-click-hint{opacity:1;background:rgba(255,255,255,.55);border-color:rgba(29,73,15,.4)}
+.badge-stage:focus-visible{outline:2px solid #244919;outline-offset:8px;border-radius:14px}
+.gcard::before{content:none;display:none}
+#qwen .p-num,#qwen .p-intro-col:first-child .col-text p:first-child::first-letter{color:#806317}
+.gcard::after{content:none;display:none}
+.gcard:hover::before,.gcard:focus-visible::before{transform:translateY(-5px);-webkit-text-stroke-color:rgba(28,75,17,.85)}
+.gcard-title{text-wrap:balance}
+.gcard-title .en{hyphens:auto;overflow-wrap:normal}
+body.lang-en .gcard-tags{gap:4px}
+body.lang-en .gcard-tags span{padding:2px 5px;max-width:100%;white-space:normal;overflow-wrap:normal}
+@media(min-width:901px){body.lang-en .carousel-wrap{bottom:calc(14% + clamp(18px,3dvh,32px) + 28px)}}
+.sb-item[data-target="graphic"]{margin-top:7px;border-top:1px solid rgba(255,255,255,.14);border-radius:0 0 8px 8px;padding-top:15px}
+.graphic{scroll-margin-top:var(--nav-offset);--project-color:#82F046}
+.rb-projects{grid-template-columns:1fr}
+.rb-project{padding:18px 20px}
+.rb-project-head{display:flex;gap:8px 18px;align-items:baseline;flex-wrap:wrap}
+.rb-project-head .y{flex-basis:100%}
+.rb-project-tags span{font-size:10px;line-height:1.5}
+.rb-text .y{font-size:11px;line-height:1.7}
+@media(min-width:1181px) and (max-width:1299px){:root{--card-w:146px;--card-step:176px}.gcard-img{height:110px}.gcard-title{font-size:13px}.gcard-tags span{font-size:9px;padding:3px 6px}}
+@media(min-width:901px) and (max-width:1180px){:root{--card-w:128px;--card-step:156px;--card-gap:26px}.gcard::before{top:-56px;font-size:64px}}
+@media(min-width:901px) and (max-height:850px){.lanyard-rope{height:60px}}
+@media(min-width:601px) and (max-width:900px){
+ :root{--card-w:140px;--card-step:166px;--card-gap:26px}
+ .carousel-wrap{bottom:52px;left:0;transform:none;height:304px;overflow-x:auto;overflow-y:hidden;padding:64px 30px 20px;scroll-padding-inline:30px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:rgba(30,75,17,.35) transparent}
+ .carousel-track{display:flex;width:max-content;height:auto;align-items:flex-start;gap:26px}
+ .gcard{position:relative;flex:0 0 140px;scroll-snap-align:start}
+ .gcard::before{top:-59px;font-size:54px}
+ .gcard::after{width:16px;top:-12px}
+ .gcard-img{height:98px}
+ .gcard-title{font-size:13px}
+ .hero-title{top:86px}
+ .nav{gap:14px}
+ .nav-links{gap:18px}
+ .nav-links a{letter-spacing:.035em}
+}
+@media(min-width:601px) and (max-width:900px) and (max-height:800px){.badge-column{top:4%}.lanyard-rope{height:42px}}
+@media(min-width:601px) and (max-width:700px){.nav{padding-inline:18px;gap:12px}.nav-logo{font-size:11px}.nav-links{gap:12px}.nav-links a{font-size:11px;letter-spacing:0}.lang-btn{padding-inline:10px}}
+@media(max-width:600px){.hero-title{top:120px;width:calc(100% - 32px)}.hero-title h1{font-size:clamp(40px,11.4vw,68px);letter-spacing:-.045em;line-height:1.15}.badge-click-hint{padding:7px 13px;min-height:42px}.badge-click-hint span{font-size:13px}.badge-click-hint svg{width:22px;height:22px}.rb-project{padding:14px}.nav-links a{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.gcard::before{transition:none}}
+</style></head>
+<body class="lang-cn">
+<nav class="nav" id="nav">
+<div class="nav-logo">Li Ruichong</div>
+<ul class="nav-links">
+<li><a href="#top"><span class="cn">首页</span><span class="en">Home</span></a></li>
+<li><a href="#projects"><span class="cn">作品</span><span class="en">Works</span></a></li>
+<li><a href="#graphic"><span class="cn">其他平面设计</span><span class="en">Other Graphic Design</span></a></li>
+<li><a href="#contact"><span class="cn">联系</span><span class="en">Contact</span></a></li>
+</ul>
+<button class="lang-btn" id="langBtn">EN / 中</button>
+</nav>
+<!-- SIDEBAR NAV -->
+<nav class="sidebar-nav" id="sidebarNav">
+<a class="sb-item" data-target="ugly" href="#ugly"><span class="sb-dot"></span><span class="sb-label"><span class="cn">丑时已到</span><span class="en">The Era of Uglies Has Arrived</span></span></a><a class="sb-item" data-target="qwen" href="#qwen"><span class="sb-dot"></span><span class="sb-label"><span class="cn">千问AI耳夹式耳机</span><span class="en">QWEN CLIP</span></span></a><a class="sb-item" data-target="loop" href="#loop"><span class="sb-dot"></span><span class="sb-label"><span class="cn">360乐园</span><span class="en">The Loop Park</span></span></a><a class="sb-item" data-target="ceramic" href="#ceramic"><span class="sb-dot"></span><span class="sb-label"><span class="cn">天工开物 · 智韵瓷章</span><span class="en">Heavenly Craftsmanship</span></span></a><a class="sb-item" data-target="gee" href="#gee"><span class="sb-dot"></span><span class="sb-label"><span class="cn">GEE计划</span><span class="en">The GEE Project</span></span></a><a class="sb-item" data-target="unbounded" href="#unbounded"><span class="sb-dot"></span><span class="sb-label"><span class="cn">无界的剧集</span><span class="en">Unbounded Theatrical Gathering</span></span></a><a class="sb-item" data-target="liangzhu" href="#liangzhu"><span class="sb-dot"></span><span class="sb-label"><span class="cn">良渚系列</span><span class="en">Liangzhu Series</span></span></a>
+<a class="sb-item" data-target="graphic" href="#graphic"><span class="sb-dot"></span><span class="sb-label"><span class="cn">其他平面设计</span><span class="en">Other Graphic Design</span></span></a></nav>
+<section class="hero-scene" id="top">
+<div class="hero-bg"></div>
+<div class="hero-grain"></div>
+<div class="hero-title" id="heroTitle"><h1>PORTFOLIO</h1></div>
+<!-- Badge column -->
+<div class="badge-column" id="badgeColumn">
+<div class="lanyard-rope" id="lanyard"></div>
+<div class="lanyard-clip"></div>
+<div aria-controls="resumePanel" aria-expanded="false" aria-label="打开或关闭简历" class="badge-stage" data-aria-label-cn="打开或关闭简历" data-aria-label-en="Open or close résumé" id="badgeStage" onclick="flipBadge()" role="button" tabindex="0">
+<div class="badge-wrapper" id="badgeWrapper">
+<div class="badge-3d" id="badge3d">
+<div class="badge-face badge-front">
+<div class="badge-photo"><img alt="李锐冲" data-alt-cn="李锐冲" data-alt-en="Li Ruichong" data-source-page="2" src="assets/1023/covers/portrait.webp"/></div>
+<div class="badge-bottom">
+<div class="badge-dot"></div>
+<div class="badge-name cn">李锐冲</div>
+<div class="badge-name en">Li Ruichong</div>
+<div class="badge-name-en cn">Li Ruichong</div>
+<div class="badge-name-en en">Spatial Designer</div>
+<div class="badge-school">
+<span class="cn">中国美术学院</span><span class="en">China Academy of Art</span>
+<span>CAA 2027</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="badge-click-hint" id="badgeHint">
+<svg viewbox="0 0 24 24"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"></path></svg>
+<span><span class="cn">点击翻转简历</span><span class="en">Click to flip</span></span>
+</div>
+</div>
+</div>
+<!-- Independent editable resume sheet: complete information, no portrait -->
+<div aria-hidden="true" class="resume-panel" id="resumePanel" inert="">
+<div class="resume-sheet" data-lenis-prevent="">
+<button aria-label="关闭简历" class="resume-close" data-aria-label-cn="关闭简历" data-aria-label-en="Close résumé" onclick="closeResume(event)" type="button">×</button>
+<div class="resume-edit-tip"><span class="cn">所有文字均可直接编辑</span><span class="en">All text is editable</span></div>
+
+
+<div class="rb-header"><div class="rb-heading" contenteditable="true" spellcheck="false"><div class="rb-eyebrow"><span class="cn">个人简历2026</span><span class="en">Résumé 2026</span></div><div class="rb-name cn">李锐冲</div><div class="rb-name en">Li Ruichong</div><div class="rb-name-en cn">24岁 · 中国美术学院 27届视觉传播学院 研究生</div><div class="rb-name-en en">24 years old · Graduate student, School of Visual Communication, China Academy of Art · Class of 2027</div></div><div class="rb-contact" contenteditable="true" spellcheck="false"><span><span class="cn">电话/微信：</span><span class="en">Phone / WeChat:</span> 13812504051</span><span><span class="cn">邮箱：</span><span class="en">Email:</span> 13812504051@163.com</span></div></div><div class="rb-grid"><section class="rb-section rb-wide"><div class="rb-label"><span class="cn">个人简介</span><span class="en">Profile</span></div><div class="rb-text" contenteditable="true" spellcheck="false"><p class="cn">具备跨领域整合与创意表达能力，拥有剧场导演与编剧经验，擅长叙事构建，能够将抽象概念转化为清晰的视觉与空间表达。熟练运用 AI 工具辅助创意设计，具备 Vibe Coding 能力，可独立搭建应用平台、开发可交互原型，推动创意快速验证与落地。责任心强，执行力突出，善于跨团队沟通协调，具备良好的学习能力、创新意识与项目推进能力。</p><p class="en">Skilled in cross-disciplinary integration and creative expression, with experience in theatre directing and scriptwriting. Strong at building narratives and translating abstract concepts into clear visual and spatial expressions. Proficient in AI-assisted creative design and Vibe Coding; able to independently build application platforms and interactive prototypes for rapid idea validation and implementation. Responsible and execution-focused, with strong cross-team communication, learning, innovation, and project delivery skills.</p></div></section><section class="rb-section"><div class="rb-label"><span class="cn">教育背景</span><span class="en">Education</span></div><div class="rb-text" contenteditable="true" spellcheck="false"><p><span class="y">2020.09–2024.06</span><br/><strong class="cn">中国美术学院（本科）</strong><strong class="en">China Academy of Art · Bachelor's</strong><br/><span class="cn">创新设计学院</span><span class="en">School of Innovation Design</span><br/><span class="cn">设计学-艺术与科技专业</span><span class="en">Design Studies — Art and Technology</span></p><p><span class="y">2024.09–2027.06</span><br/><strong class="cn">中国美术学院（硕士）</strong><strong class="en">China Academy of Art · Master's</strong><br/><span class="cn">视觉传播学院</span><span class="en">School of Visual Communication</span><br/><span class="cn">设计学-视觉设计与创意策略</span><span class="en">Design Studies — Visual Design and Creative Strategy</span></p></div></section><section class="rb-section"><div class="rb-label"><span class="cn">主要荣誉</span><span class="en">Major Honors</span></div><div class="rb-text" contenteditable="true" spellcheck="false"><p class="cn">2020–2023年连续三年获得省政府奖学金</p><p class="en">Provincial Government Scholarship for three consecutive years, 2020–2023</p><p class="cn">2020–2023年连续三年获得“三好学生”荣誉称号</p><p class="en">Merit Student honor for three consecutive years, 2020–2023</p><p class="cn">国家级大学生创新创业训练计划项目结题</p><p class="en">Completed a project under the National College Student Innovation and Entrepreneurship Training Program</p><p class="cn">2024ROCA平面与空间设计奖-金奖</p><p class="en">Gold, 2024 ROCA Graphic and Spatial Design Award</p></div></section><section class="rb-section rb-wide"><div class="rb-label"><span class="cn">设计领域与工具</span><span class="en">Fields &amp; Tools</span></div><div class="rb-text" contenteditable="true" spellcheck="false"><p><strong class="cn">专业领域：</strong><strong class="en">Areas of Expertise:</strong><span class="cn">视觉设计、创意营销、空间设计、AIGC设计</span><span class="en">Visual Design, Creative Marketing, Spatial Design, AIGC Design</span></p><div class="rb-chipline"><span class="rb-chip">AI</span><span class="rb-chip">PS</span><span class="rb-chip">ID</span><span class="rb-chip">PR</span><span class="rb-chip">AE</span><span class="rb-chip">Figma</span><span class="rb-chip">Sketchup</span><span class="rb-chip">Midjourney</span><span class="rb-chip">Runway</span><span class="rb-chip">Codex</span></div></div></section><section class="rb-section rb-full"><div class="rb-label"><span class="cn">实习经历</span><span class="en">Internship Experience</span></div><div class="rb-text rb-experience" contenteditable="true" spellcheck="false"><div class="rb-role"><span class="y">2026/06 – 2026/10</span><br/><strong class="cn">千问AI硬件设计部</strong><strong class="en">Qwen AI Hardware Design Department</strong><br/><span class="cn">阿里巴巴千问事业部</span><span class="en">Alibaba Qwen Business Unit</span><br/><span class="cn">AI创意营销设计师</span><span class="en">AI Creative Marketing Designer</span></div><div><div class="rb-bullets cn"><p><strong>品牌视觉体系建设：</strong> 参与「千问」品牌 VIS 搭建与迭代，协同完善标志、色彩、字体及辅助图形等视觉规范，输出品牌视觉手册，推动品牌视觉标准化与规范化落地，提升品牌在不同触点的统一性；参与 AI 数字人模特的风格定义、素材生成与资产管理，搭建可复用的数字视觉资产库，提升多渠道内容生产效率，强化品牌视觉的一致性与辨识度。</p><p><strong>新品营销创意设计：</strong> 担任 AI 耳机新品上市营销项目 PM，协同市场、ID、声学及营销团队，统筹创意策划与视觉落地，完成主 KV、电商详情页、平台橱窗图、社媒素材及发布会视觉设计，确保各渠道视觉表达与产品定位一致；探索 AI 设计工具的应用，沉淀标准化流程，优化创意生产链路，提升视觉物料产出效率与迭代速度。</p><p><strong>展会与空间视觉设计：</strong> 负责品牌线下展厅改造升级，结合最新产品体验线规范优化展陈布局、空间动线与视觉呈现，协调品牌理念与空间体验的融合，提升展厅的品牌传达力与空间质感，强化线下场景的品牌识别与用户体验。</p></div><div class="rb-bullets en"><p><strong>Brand Visual System Development:</strong> Contributed to developing and iterating Qwen's visual identity system (VIS), refining standards for logos, colors, typography, and supporting graphics. Produced brand guidelines and helped implement visual standards for consistency across touchpoints. Contributed to style definition, content generation, and asset management for AI digital-human models, building a reusable visual asset library to improve multichannel content production and brand consistency and recognition.</p><p><strong>Product Launch Creative Design:</strong> Served as PM for an AI earphone launch marketing project, coordinating market, industrial design, acoustics, and marketing teams across creative planning and visual delivery. Created the main key visual, e-commerce product pages, platform showcase images, social media assets, and launch-event visuals, aligning all channels with product positioning. Explored AI design tools, established standardized workflows, and streamlined creative production to improve asset output and iteration speed.</p><p><strong>Exhibition and Spatial Visual Design:</strong> Led upgrades to the brand's physical showroom, optimizing displays, visitor circulation, and visual presentation in line with the latest product experience route standards. Integrated brand concepts with the spatial experience to strengthen brand communication, spatial quality, brand recognition, and the visitor experience.</p></div></div></div></section><section class="rb-section rb-full"><div class="rb-label"><span class="cn">项目经历</span><span class="en">Project Experience</span></div><div class="rb-projects" contenteditable="true" spellcheck="false"><article class="rb-project"><div class="rb-project-head"><span class="y">2026/03 – 2026/04</span><strong class="cn">影像展《360乐园》 | 2050大会-团聚之夜</strong><strong class="en">360 Wonderland Moving-Image Exhibition | 2050 Conference — Reunion Night</strong></div><div class="rb-project-tags"><span class="cn">AIGC创意视频</span><span class="en">AIGC Creative Video</span><span class="cn">展览统筹</span><span class="en">Exhibition Coordination</span></div><div class="rb-text cn"><p><strong>项目概况：</strong> 主导 2050 大会核心展演项目「360乐园」的策划与落地，融合 AI 生成影像、沉浸式交互与数字体验，构建未来游乐园式的沉浸展演场景，探索科技与艺术的跨界表达。</p><p><strong>工作内容：</strong> 负责 12 组艺术家及设计师的邀约对接与参展协调，统筹展演项目执行与现场落地；主导项目主视觉设计及线上线下传播物料制作，参与开场 AIGC 影像创意与视觉设计，推动项目从创意策划到现场呈现的完整落地。</p></div><div class="rb-text en"><p><strong>Project Overview:</strong> Led the planning and delivery of 360 Wonderland, a core exhibition and performance project at the 2050 Conference. Combined AI-generated imagery, immersive interaction, and digital experiences into a futuristic amusement-park setting, exploring cross-disciplinary expression between technology and art.</p><p><strong>Responsibilities:</strong> Invited and coordinated participation for 12 groups of artists and designers, overseeing project execution and on-site delivery. Led the main visual design and online/offline communication asset production, contributed to the opening AIGC video's concept and visual design, and carried the project from creative planning through final presentation.</p></div></article><article class="rb-project"><div class="rb-project-head"><span class="y">2025/04 – 2025/07</span><strong class="cn">展览《丑时已到》 | 天猫 · 淘宝</strong><strong class="en">The Ugly Hour Exhibition | Tmall · Taobao</strong></div><div class="rb-project-tags"><span class="cn">创意策划</span><span class="en">Creative Planning</span><span class="cn">视觉设计</span><span class="en">Visual Design</span><span class="cn">空间设计</span><span class="en">Spatial Design</span></div><div class="rb-text cn"><p><strong>项目概况：</strong> 主导淘宝「丑东西」IP 线下首展全案策划，围绕 IP 文化内核提炼策展概念，构建展览叙事与运营方案，推动线上 IP 内容向线下沉浸式展览体验转化，实现品牌影响力的跨场景延伸。</p><p><strong>策展与视觉设计：</strong> 统筹展览视觉系统与空间设计，完成主视觉 KV、线上线下宣传物料及展览空间设计，协调展陈方案与制作执行，推进设计方案落地，保障展览整体视觉表达与现场呈现效果。</p><p><strong>商务沟通与项目管理：</strong> 对接淘宝集团公共关系部及天目里场馆，统筹跨团队沟通与项目协作，完成商务洽谈、版权协议对接、展品结算等全流程商务工作，推动项目各环节有序落地。</p></div><div class="rb-text en"><p><strong>Project Overview:</strong> Led end-to-end planning for the first physical exhibition of Taobao's Ugly Things IP. Developed the curatorial concept from its cultural core, built the exhibition narrative and operating plan, and translated online IP content into an immersive physical experience, extending brand influence across contexts.</p><p><strong>Curation and Visual Design:</strong> Directed the exhibition's visual system and spatial design, creating the key visual, online/offline promotional materials, and exhibition space design. Coordinated display plans and production, implemented the designs, and ensured a cohesive visual identity and on-site presentation.</p><p><strong>Business Communication and Project Management:</strong> Liaised with Taobao Group's Public Relations Department and the Tianmuli venue, coordinating cross-team communication and collaboration. Handled business negotiations, copyright agreement coordination, and exhibit settlements to ensure orderly delivery across all project stages.</p></div></article><article class="rb-project"><div class="rb-project-head"><span class="y">2025/07 – 2025/11</span><strong class="cn">全国大学生第二届陶瓷艺术大赛 | 江西省教育厅</strong><strong class="en">2nd National College Student Ceramic Art Competition | Jiangxi Provincial Department of Education</strong></div><div class="rb-project-tags"><span class="cn">视觉设计</span><span class="en">Visual Design</span><span class="cn">空间设计</span><span class="en">Spatial Design</span></div><div class="rb-text cn"><p><strong>项目概况：</strong> 在人工智能时代背景下，以“天工开物 · 智韵瓷章”为主题进行展览，在景德镇职业艺术大学美术馆开展。</p><p><strong>工作概况：</strong> 统筹展览整体视觉系统设计，完成主 KV、线上线下宣传物料及互动 UI 界面设计；统筹 4000 平方米展览空间设计与落地；对接参展艺术家及近 500 件展品，推进展览全流程协调与执行。</p></div><div class="rb-text en"><p><strong>Project Overview:</strong> An exhibition in the age of AI, themed Tiangong Kaiwu · Intelligent Ceramic Chapters, held at the art museum of Jingdezhen Vocational University of Art.</p><p><strong>Responsibilities:</strong> Directed the exhibition's overall visual system, including the main key visual, online/offline promotional materials, and interactive UI. Oversaw design and delivery of 4,000 m² of exhibition space, coordinated participating artists and nearly 500 exhibits, and managed coordination and execution throughout the exhibition process.</p></div></article></div></section></div></div>
+</div>
+<!-- Fixed concave project row -->
+<div class="carousel-wrap" id="carouselWrap">
+<div class="carousel-track" id="carouselTrack">
+<div aria-label="打开项目：丑时已到" class="gcard" data-aria-label-cn="打开项目：丑时已到" data-aria-label-en="Open project: The Era of Uglies Has Arrived" data-idx="0" data-project="ugly" role="button" style="--project-color:#FF5D45;--project-paper:#FFF1ED;--project-on:#171115">
+<div class="gcard-glass">
+<div class="gcard-shine"></div>
+<div class="gcard-img"><img alt="丑时已到" data-alt-cn="丑时已到" data-alt-en="The Era of Uglies Has Arrived" data-source-page="3" height="1064" src="assets/1023/covers/ugly.webp" width="1600"/></div>
+<div class="gcard-info">
+<div class="gcard-title"><span class="cn">丑时已到</span><span class="en">The Era of Uglies Has Arrived</span></div>
+<div class="gcard-tags"><span class="cn">创意策划</span><span class="en">Creative Planning</span><span class="cn">展陈设计</span><span class="en">Exhibition Design</span><span class="cn">视觉设计</span><span class="en">Visual Design</span></div>
+</div>
+</div>
+</div><div aria-label="打开项目：千问AI耳夹式耳机" class="gcard" data-aria-label-cn="打开项目：千问AI耳夹式耳机" data-aria-label-en="Open project: QWEN CLIP" data-idx="1" data-project="qwen" role="button" style="--project-color:#E7C64B;--project-paper:#FFF8DD;--project-on:#29240F">
+<div class="gcard-glass">
+<div class="gcard-shine"></div>
+<div class="gcard-img"><img alt="千问AI耳夹式耳机" data-alt-cn="千问AI耳夹式耳机" data-alt-en="QWEN CLIP" data-source-page="20" height="1027" src="assets/1023/covers/qwen.webp" width="1337"/></div>
+<div class="gcard-info">
+<div class="gcard-title"><span class="cn">千问AI耳夹式耳机</span><span class="en">QWEN CLIP</span></div>
+<div class="gcard-tags"><span class="cn">视觉设计</span><span class="en">Visual Design</span></div>
+</div>
+</div>
+</div><div aria-label="打开项目：360乐园" class="gcard" data-aria-label-cn="打开项目：360乐园" data-aria-label-en="Open project: The Loop Park" data-idx="2" data-project="loop" role="button" style="--project-color:#16AFE8;--project-paper:#EAF9FF;--project-on:#101820">
+<div class="gcard-glass">
+<div class="gcard-shine"></div>
+<div class="gcard-img"><img alt="360乐园" data-alt-cn="360乐园" data-alt-en="The Loop Park" data-source-page="31" height="1066" src="assets/1023/covers/loop.webp" width="1600"/></div>
+<div class="gcard-info">
+<div class="gcard-title"><span class="cn">360乐园</span><span class="en">The Loop Park</span></div>
+<div class="gcard-tags"><span class="cn">创意策划</span><span class="en">Creative Planning</span><span class="cn">视觉设计</span><span class="en">Visual Design</span><span>AIGC</span></div>
+</div>
+</div>
+</div><div aria-label="打开项目：天工开物 · 智韵瓷章" class="gcard" data-aria-label-cn="打开项目：天工开物 · 智韵瓷章" data-aria-label-en="Open project: Heavenly Craftsmanship" data-idx="3" data-project="ceramic" role="button" style="--project-color:#2456FF;--project-paper:#EEF3FF;--project-on:#FFFFFF">
+<div class="gcard-glass">
+<div class="gcard-shine"></div>
+<div class="gcard-img"><img alt="天工开物 · 智韵瓷章" data-alt-cn="天工开物 · 智韵瓷章" data-alt-en="Heavenly Craftsmanship" data-source-page="37" height="1067" src="assets/1023/covers/ceramic.webp" width="1600"/></div>
+<div class="gcard-info">
+<div class="gcard-title"><span class="cn">天工开物 · 智韵瓷章</span><span class="en">Heavenly Craftsman<wbr/>ship</span></div>
+<div class="gcard-tags"><span class="cn">展陈设计</span><span class="en">Exhibition Design</span><span class="cn">视觉设计</span><span class="en">Visual Design</span></div>
+</div>
+</div>
+</div><div aria-label="打开项目：GEE计划" class="gcard" data-aria-label-cn="打开项目：GEE计划" data-aria-label-en="Open project: The GEE Project" data-idx="4" data-project="gee" role="button" style="--project-color:#D6FF3D;--project-paper:#F7FFDC;--project-on:#151811">
+<div class="gcard-glass">
+<div class="gcard-shine"></div>
+<div class="gcard-img"><img alt="GEE计划" data-alt-cn="GEE计划" data-alt-en="The GEE Project" data-source-page="50" height="565" src="assets/1023/covers/gee.webp" width="1600"/></div>
+<div class="gcard-info">
+<div class="gcard-title"><span class="cn">GEE计划</span><span class="en">The GEE Project</span></div>
+<div class="gcard-tags"><span class="cn">服务设计</span><span class="en">Service Design</span></div>
+</div>
+</div>
+</div><div aria-label="打开项目：无界的剧集" class="gcard" data-aria-label-cn="打开项目：无界的剧集" data-aria-label-en="Open project: Unbounded Theatrical Gathering" data-idx="5" data-project="unbounded" role="button" style="--project-color:#795EFF;--project-paper:#F1EEFF;--project-on:#FFFFFF">
+<div class="gcard-glass">
+<div class="gcard-shine"></div>
+<div class="gcard-img"><img alt="无界的剧集" data-alt-cn="无界的剧集" data-alt-en="Unbounded Theatrical Gathering" data-source-page="54" height="1200" src="assets/1023/covers/unbounded.webp" width="1600"/></div>
+<div class="gcard-info">
+<div class="gcard-title"><span class="cn">无界的剧集</span><span class="en">Un<wbr/>bounded Theatrical Gathering</span></div>
+<div class="gcard-tags"><span class="cn">创意策划</span><span class="en">Creative Planning</span><span class="cn">展陈设计</span><span class="en">Exhibition Design</span><span class="cn">视觉设计</span><span class="en">Visual Design</span></div>
+</div>
+</div>
+</div><div aria-label="打开项目：良渚系列" class="gcard" data-aria-label-cn="打开项目：良渚系列" data-aria-label-en="Open project: Liangzhu Series" data-idx="6" data-project="liangzhu" role="button" style="--project-color:#C4653A;--project-paper:#FFF0E8;--project-on:#FFFFFF">
+<div class="gcard-glass">
+<div class="gcard-shine"></div>
+<div class="gcard-img"><img alt="良渚系列" data-alt-cn="良渚系列" data-alt-en="Liangzhu Series" data-source-page="66" height="900" src="assets/1023/covers/liangzhu.webp" width="1600"/></div>
+<div class="gcard-info">
+<div class="gcard-title"><span class="cn">良渚系列</span><span class="en">Liangzhu Series</span></div>
+<div class="gcard-tags"><span class="cn">展陈设计</span><span class="en">Exhibition Design</span><span class="cn">视觉设计</span><span class="en">Visual Design</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="scroll-cue" id="scrollCue"><span>Scroll</span><div class="scroll-cue-line"></div></div>
+</section>
+<div id="projects">
+<section class="project" data-project-theme="ugly" id="ugly" style="--project-color:#FF5D45;--project-paper:#FFF1ED;--project-on:#171115">
+<div class="p-header">
+<div aria-hidden="true" class="p-wordmark">The Era of Uglies Has Arrived</div>
+<div class="p-num">01</div>
+<div class="p-kicker"><span class="cn">项目档案</span><span class="en">Project Archive</span></div>
+<div class="p-cover"><img alt="丑时已到项目封面" data-source-page="3" height="1064" src="assets/1023/covers/ugly.webp" width="1600"/></div>
+<h2 class="p-title" tabindex="-1"><span class="cn">丑时已到</span><span class="en">The Era of Uglies Has Arrived</span></h2>
+<div class="p-subtitle"><span class="cn">淘宝丑东西艺术策展</span><span class="en">Taobao's Treasures Ugliness: an Art Exhibition</span></div>
+<div class="p-tags"><span class="ptag"><span class="cn">创意策划</span><span class="en">Creative Planning</span></span><span class="ptag"><span class="cn">展陈设计</span><span class="en">Exhibition Design</span></span><span class="ptag"><span class="cn">视觉设计</span><span class="en">Visual Design</span></span></div><div class="p-client rt"><span class="cn">委托方 | 淘宝 天猫·淘宝丑东西项目组</span><span class="en">Client | 淘宝 天猫·淘宝丑东西项目组</span></div>
+</div>
+<div class="p-body">
+<div class="p-intro">
+<div class="p-intro-col">
+<div class="col-hd rt"><span class="cn">项目简介</span><span class="en">Introduction</span></div>
+<div class="col-text cn"><p class="rt">美是规训，丑是自由；美是标准答案，丑是参差多态；美是公约数，但丑是我喜欢。</p>
+<p class="rt">从2020年开始，淘宝每年为丑萌的宝贝们举办"淘宝丑东西大赛"。绿鱼人面具、微笑的橘子头套等，这些社交媒体上备受喜爱的"常客"，网络表情包中的"主角"，都是历届大赛的获奖作品。当这些曾经作为社交媒体中"梗"表达的丑东西走进展厅，它们开始转化为另一种文化叙事：一场线下的"丑东西艺术展"不仅是对淘宝丑东西大赛五年来网生现象的回顾与归档，更是一次邀请——邀请观众把看似荒诞的丑物放到美术馆的白墙下重新凝视。</p>
+<p class="rt">《丑时已到》并非为"丑"正名，也无意颠覆既有的美学价值。它更希望成为一个契机：邀请观众悬置习以为常的审美判断，去感知这些"丑东西"所蕴含的未被规训的生命力，以及它们所潜藏的创造之力。</p></div>
+<div class="col-text en"><p class="rt">Beauty is discipline; ugliness is freedom. Beauty is the standard answer; ugliness is glorious diversity.</p>
+<p class="rt">Since 2020, Taobao has held an annual "Ugly Things Contest." When meme-worthy products enter the gallery, they transform into a cultural narrative — an offline exhibition archiving five years of internet-born phenomena, inviting viewers to re-examine the absurd under museum walls.</p>
+<p class="rt">This exhibition does not seek to vindicate "ugliness" nor overthrow aesthetics. It creates an opening to suspend habitual judgment and perceive the untamed vitality within these "ugly things."</p></div>
+</div>
+<div class="p-intro-col p-intro-right">
+<div class="col-hd rt"><span class="cn">核心概念</span><span class="en">Core Concept</span></div>
+<div class="col-text cn"><p class="rt">美是规训，丑是自由；美是标准答案，丑是参差多态；美是公约数，但丑是我喜欢。</p></div>
+<div class="col-text en"><p class="rt">Beauty is discipline; ugliness is freedom. Beauty is the standard answer; ugliness is glorious diversity.</p></div>
+</div>
+</div>
+<div class="p-sections">
+<div class="project-media">
+<div class="section-index rt">
+<span class="section-index-label"><span class="cn">项目分类</span><span class="en">Project Index</span></span>
+<a class="section-chip" href="#ugly-chapter-1"><span class="chip-label"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></span><b>02</b></a><a class="section-chip" href="#ugly-chapter-2"><span class="chip-label"><span class="label-primary" lang="zh-CN">策划</span><span class="label-secondary" lang="en">Curating</span></span><b>04</b></a><a class="section-chip" href="#ugly-chapter-3"><span class="chip-label"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></span><b>05</b></a><a class="section-chip" href="#ugly-chapter-4"><span class="chip-label"><span class="label-primary" lang="zh-CN">空间</span><span class="label-secondary" lang="en">Space</span></span><b>02</b></a><a class="section-chip" href="#ugly-chapter-5"><span class="chip-label"><span class="label-primary" lang="zh-CN">反馈</span><span class="label-secondary" lang="en">Feedback</span></span><b>03</b></a>
+</div>
+<section class="project-chapter keynote-chapter" data-section-order="01" id="ugly-chapter-1">
+<header class="chapter-band rt">
+<div class="chapter-no">01</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></h3>
+<div class="chapter-meta">P.04–05<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="4" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第4页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p04.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="5" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第5页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p05.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="02" id="ugly-chapter-2">
+<header class="chapter-band rt">
+<div class="chapter-no">02</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">策划</span><span class="label-secondary" lang="en">Curating</span></h3>
+<div class="chapter-meta">P.06–09<br/>04 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="6" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第6页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p06.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="7" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第7页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p07.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="8" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第8页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p08.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="9" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第9页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p09.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="03" id="ugly-chapter-3">
+<header class="chapter-band rt">
+<div class="chapter-no">03</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></h3>
+<div class="chapter-meta">P.10–14<br/>05 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="10" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第10页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p10.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="11" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第11页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p11.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="12" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第12页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p12.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="13" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第13页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p13.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="14" data-sequence="5" data-source="portfolio-1023"><img alt="作品集1023 · 第14页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p14.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="04" id="ugly-chapter-4">
+<header class="chapter-band rt">
+<div class="chapter-no">04</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">空间</span><span class="label-secondary" lang="en">Space</span></h3>
+<div class="chapter-meta">P.15–16<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="15" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第15页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p15.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="16" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第16页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p16.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="05" id="ugly-chapter-5">
+<header class="chapter-band rt">
+<div class="chapter-no">05</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">反馈</span><span class="label-secondary" lang="en">Feedback</span></h3>
+<div class="chapter-meta">P.17–19<br/>03 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="17" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第17页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p17.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="18" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第18页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p18.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="19" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第19页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p19.webp" width="2400"/></figure></div>
+</section>
+</div></div>
+</div>
+</section>
+<section class="project" data-project-theme="qwen" id="qwen" style="--project-color:#E7C64B;--project-paper:#FFF8DD;--project-on:#29240F">
+<div class="p-header">
+<div aria-hidden="true" class="p-wordmark">QWEN CLIP</div>
+<div class="p-num">02</div>
+<div class="p-kicker"><span class="cn">项目档案</span><span class="en">Project Archive</span></div>
+<div class="p-cover"><img alt="千问AI耳夹式耳机项目封面" data-source-page="20" height="1027" src="assets/1023/covers/qwen.webp" width="1337"/></div>
+<h2 class="p-title" tabindex="-1"><span class="cn"><span class="title-unit">千问AI</span><wbr/><span class="title-unit">耳夹式耳机</span></span><span class="en">QWEN CLIP</span></h2>
+<div class="p-subtitle"><span class="cn">商品详情页等相关设计</span><span class="en">Product Detail Page and Related Designs</span></div>
+<div class="p-tags"><span class="ptag"><span class="cn">视觉设计</span><span class="en">Visual Design</span></span></div><div class="p-client rt"><span class="cn">委托方 | 千问AI硬件事业部</span><span class="en">Client | 千问AI硬件事业部</span></div>
+</div>
+<div class="p-body">
+<div class="p-intro">
+<div class="p-intro-col">
+<div class="col-hd rt"><span class="cn">项目简介</span><span class="en">Introduction</span></div>
+<div class="col-text cn"><p class="rt">千问 AI 耳机详情页项目围绕音质表现、佩戴体验和原生 AI 能力展开。面对卖点数量多、硬件参数专业、AI 功能较抽象的问题，我从文案梳理和信息分级入手，搭建“目标—策略—视觉抓手”的内容结构，并完成色彩定调、产品渲染、硬件结构图、AI 界面及图标等设计。最终将技术参数转化为更容易理解的使用价值，在统一的视觉体系中兼顾产品质感、技术可信度和场景代入感。</p></div>
+<div class="col-text en"><p class="rt">The Qwen AI ear-clip headphones detail-page project centers on sound quality, wearing comfort, and native AI capabilities. To clarify numerous selling points, technical hardware specifications, and abstract AI functions, I structured the content around goals, strategies, and visual devices, then developed the color direction, product rendering, hardware diagrams, AI interfaces, and icons. The final system translates technical parameters into understandable user value while balancing product quality, technical credibility, and scenario immersion.</p></div>
+</div>
+<div class="p-intro-col p-intro-right">
+<div class="col-hd rt"><span class="cn">核心概念</span><span class="en">Core Concept</span></div>
+<div class="col-text cn"><p class="rt">千问 AI 耳机详情页项目围绕音质表现、佩戴体验和原生 AI 能力展开。面对卖点数量多、硬件参数专业、AI 功能较抽象的问题，我从文案梳理和信息分级入手，搭建“目标—策略—视觉抓手”的内容结构，并完成色彩定调、产品渲染、硬件结构图、AI 界面及图标等设计。最终将技术参数转化为更容易理解的使用价值，在统一的视觉体系中兼顾产品质感、技术可信度和场景代入感。</p></div>
+<div class="col-text en"><p class="rt">The Qwen AI ear-clip headphones detail-page project centers on sound quality, wearing comfort, and native AI capabilities. To clarify numerous selling points, technical hardware specifications, and abstract AI functions, I structured the content around goals, strategies, and visual devices, then developed the color direction, product rendering, hardware diagrams, AI interfaces, and icons. The final system translates technical parameters into understandable user value while balancing product quality, technical credibility, and scenario immersion.</p></div>
+</div>
+</div>
+<div class="p-sections">
+<div class="project-media">
+<div class="section-index rt">
+<span class="section-index-label"><span class="cn">项目分类</span><span class="en">Project Index</span></span>
+<a class="section-chip" href="#qwen-chapter-1"><span class="chip-label"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></span><b>01</b></a><a class="section-chip" href="#qwen-chapter-2"><span class="chip-label"><span class="label-primary" lang="zh-CN">设计策略</span><span class="label-secondary" lang="en">Strategy</span></span><b>01</b></a><a class="section-chip" href="#qwen-chapter-3"><span class="chip-label"><span class="label-primary" lang="zh-CN">工作流程</span><span class="label-secondary" lang="en">Workflow</span></span><b>02</b></a><a class="section-chip" href="#qwen-chapter-4"><span class="chip-label"><span class="label-primary" lang="zh-CN">视觉成果</span><span class="label-secondary" lang="en">Visual Outcomes</span></span><b>01</b></a>
+</div>
+<section class="project-chapter keynote-chapter" data-section-order="01" id="qwen-chapter-1">
+<header class="chapter-band rt">
+<div class="chapter-no">01</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></h3>
+<div class="chapter-meta">P.21–22<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="21" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第21页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p21.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="22" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第22页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p22.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="02" id="qwen-chapter-2">
+<header class="chapter-band rt">
+<div class="chapter-no">02</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">设计策略</span><span class="label-secondary" lang="en">Strategy</span></h3>
+<div class="chapter-meta">P.23–26<br/>04 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="23" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第23页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p23.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="24" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第24页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p24.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="25" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第25页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p25.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="26" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第26页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p26.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="03" id="qwen-chapter-3">
+<header class="chapter-band rt">
+<div class="chapter-no">03</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">工作流程</span><span class="label-secondary" lang="en">Workflow</span></h3>
+<div class="chapter-meta">P.27<br/>01 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="27" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第27页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p27.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="04" id="qwen-chapter-4">
+<header class="chapter-band rt">
+<div class="chapter-no">04</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">视觉成果</span><span class="label-secondary" lang="en">Visual Outcomes</span></h3>
+<div class="chapter-meta">P.28–30<br/>03 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="28" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第28页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p28.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="29" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第29页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p29.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="30" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第30页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p30.webp" width="2400"/></figure></div>
+</section>
+</div></div>
+</div>
+</section>
+<section class="project" data-project-theme="loop" id="loop" style="--project-color:#16AFE8;--project-paper:#EAF9FF;--project-on:#101820">
+<div class="p-header">
+<div aria-hidden="true" class="p-wordmark">The Loop Park</div>
+<div class="p-num">03</div>
+<div class="p-kicker"><span class="cn">项目档案</span><span class="en">Project Archive</span></div>
+<div class="p-cover"><img alt="360乐园项目封面" data-source-page="31" height="1066" src="assets/1023/covers/loop.webp" width="1600"/></div>
+<h2 class="p-title" tabindex="-1"><span class="cn">360乐园</span><span class="en">The Loop Park</span></h2>
+<div class="p-subtitle"><span class="cn">2050大会影像艺术展</span><span class="en">2050 Conference Video Art Exhibition</span></div>
+<div class="p-tags"><span class="ptag"><span class="cn">创意策划</span><span class="en">Creative Planning</span></span><span class="ptag"><span class="cn">视觉设计</span><span class="en">Visual Design</span></span><span class="ptag"><span class="cn">AIGC</span><span class="en">AIGC</span></span></div>
+</div>
+<div class="p-body">
+<div class="p-intro">
+<div class="p-intro-col">
+<div class="col-hd rt"><span class="cn">项目简介</span><span class="en">Introduction</span></div>
+<div class="col-text cn"><p class="rt">360乐园以未来游乐园为叙事原型，构建了一场融合AI生成影像、现场沉浸交互与数字感官体验的展演场域。通过360°的环绕屏幕，观众被置入一个介于梦境与游戏之间的算法景观中，在流动的感知系统里理解情绪、身体与现实。</p>
+<p class="rt">未来不是等待发生的，而是正在被制造的。这座未来游乐园，不是一个抵达性的目的地，而是一个正在被持续生成的世界。</p></div>
+<div class="col-text en"><p class="rt">The Loop Park uses the future amusement park as narrative prototype, fusing AI-generated visuals, live immersive interaction, and digital sensory experience. Through 360° screens, audiences enter an algorithmic landscape between dreams and games.</p>
+<p class="rt">The future is not waiting to happen — it is being manufactured. This is not a destination but a continuously generated world.</p></div>
+</div>
+<div class="p-intro-col p-intro-right">
+<div class="col-hd rt"><span class="cn">核心概念</span><span class="en">Core Concept</span></div>
+<div class="col-text cn"><p class="rt">360乐园以未来游乐园为叙事原型，构建了一场融合AI生成影像、现场沉浸交互与数字感官体验的展演场域。通过360°的环绕屏幕，观众被置入一个介于梦境与游戏之间的算法景观中，在流动的感知系统里理解情绪、身体与现实。</p></div>
+<div class="col-text en"><p class="rt">The Loop Park uses the future amusement park as narrative prototype, fusing AI-generated visuals, live immersive interaction, and digital sensory experience. Through 360° screens, audiences enter an algorithmic landscape between dreams and games.</p></div>
+</div>
+</div>
+<div class="p-sections">
+<div class="project-media">
+<div class="section-index rt">
+<span class="section-index-label"><span class="cn">项目分类</span><span class="en">Project Index</span></span>
+<a class="section-chip" href="#loop-chapter-1"><span class="chip-label"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></span><b>01</b></a><a class="section-chip" href="#loop-chapter-2"><span class="chip-label"><span class="label-primary">AIGC 影像</span></span><b>01</b></a><a class="section-chip" href="#loop-chapter-3"><span class="chip-label"><span class="label-primary">Vibe Coding</span></span><b>01</b></a>
+</div>
+<section class="project-chapter keynote-chapter" data-section-order="01" id="loop-chapter-1">
+<header class="chapter-band rt">
+<div class="chapter-no">01</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></h3>
+<div class="chapter-meta">P.32–33<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="32" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第32页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p32.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="33" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第33页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p33.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="02" id="loop-chapter-2">
+<header class="chapter-band rt">
+<div class="chapter-no">02</div>
+<h3 class="chapter-title"><span class="label-primary">AIGC 影像</span></h3>
+<div class="chapter-meta">P.34–35<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="34" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第34页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p34.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="35" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第35页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p35.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="03" id="loop-chapter-3">
+<header class="chapter-band rt">
+<div class="chapter-no">03</div>
+<h3 class="chapter-title"><span class="label-primary">Vibe Coding</span></h3>
+<div class="chapter-meta">P.36<br/>01 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="36" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第36页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p36.webp" width="2400"/></figure></div>
+</section>
+</div></div>
+</div>
+</section>
+<section class="project" data-project-theme="ceramic" id="ceramic" style="--project-color:#2456FF;--project-paper:#EEF3FF;--project-on:#FFFFFF">
+<div class="p-header">
+<div aria-hidden="true" class="p-wordmark">Heavenly Craftsmanship</div>
+<div class="p-num">04</div>
+<div class="p-kicker"><span class="cn">项目档案</span><span class="en">Project Archive</span></div>
+<div class="p-cover"><img alt="天工开物 · 智韵瓷章项目封面" data-source-page="37" height="1067" src="assets/1023/covers/ceramic.webp" width="1600"/></div>
+<h2 class="p-title" tabindex="-1"><span class="cn"><span class="title-unit">天工开物 ·</span> <wbr/><span class="title-unit">智韵瓷章</span></span><span class="en">Heavenly Craftsmanship</span></h2>
+<div class="p-subtitle"><span class="cn">第二届全国大学生陶艺作品展</span><span class="en">The 2nd National College Student Ceramic Art Exhibition</span></div>
+<div class="p-tags"><span class="ptag"><span class="cn">展陈设计</span><span class="en">Exhibition Design</span></span><span class="ptag"><span class="cn">视觉设计</span><span class="en">Visual Design</span></span></div><div class="p-client rt"><span class="cn">委托方 | 江西省教育厅 景德镇市人民政府</span><span class="en">Client | 江西省教育厅 景德镇市人民政府</span></div>
+</div>
+<div class="p-body">
+<div class="p-intro">
+<div class="p-intro-col">
+<div class="col-hd rt"><span class="cn">项目简介</span><span class="en">Introduction</span></div>
+<div class="col-text cn"><p class="rt">在人工智能时代背景下，第二届全国大学生陶艺作品展以"天工开物·智韵瓷章"为学术命题，系统探讨传统陶瓷艺术在礼乐文化传承、文人美学表达和生活哲学实践等领域的当代转绎与创新发展。</p>
+<p class="rt">立足东方陶瓷文明的物质性与人工智能时代的技术性，在空间中构建一个可游走、可对话、可共创的场域叙事。展览空间约4000平方米。</p></div>
+<div class="col-text en"><p class="rt">Set against the backdrop of the AI era, this exhibition explores how traditional ceramic art contemporarily transforms cultural heritage, literati aesthetics, and life philosophy. The 4,000 sqm space constructs a walkable, conversational, and co-creative narrative field.</p></div>
+</div>
+<div class="p-intro-col p-intro-right">
+<div class="col-hd rt"><span class="cn">核心概念</span><span class="en">Core Concept</span></div>
+<div class="col-text cn"><p class="rt">在人工智能时代背景下，第二届全国大学生陶艺作品展以"天工开物·智韵瓷章"为学术命题，系统探讨传统陶瓷艺术在礼乐文化传承、文人美学表达和生活哲学实践等领域的当代转绎与创新发展。</p></div>
+<div class="col-text en"><p class="rt">Set against the backdrop of the AI era, this exhibition explores how traditional ceramic art contemporarily transforms cultural heritage, literati aesthetics, and life philosophy. The 4,000 sqm space constructs a walkable, conversational, and co-creative narrative field.</p></div>
+</div>
+</div>
+<div class="p-sections">
+<div class="project-media">
+<div class="section-index rt">
+<span class="section-index-label"><span class="cn">项目分类</span><span class="en">Project Index</span></span>
+<a class="section-chip" href="#ceramic-chapter-1"><span class="chip-label"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></span><b>01</b></a><a class="section-chip" href="#ceramic-chapter-2"><span class="chip-label"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></span><b>05</b></a><a class="section-chip" href="#ceramic-chapter-3"><span class="chip-label"><span class="label-primary" lang="zh-CN">空间</span><span class="label-secondary" lang="en">Space</span></span><b>05</b></a>
+</div>
+<section class="project-chapter keynote-chapter" data-section-order="01" id="ceramic-chapter-1">
+<header class="chapter-band rt">
+<div class="chapter-no">01</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></h3>
+<div class="chapter-meta">P.38<br/>01 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="38" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第38页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p38.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="02" id="ceramic-chapter-2">
+<header class="chapter-band rt">
+<div class="chapter-no">02</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></h3>
+<div class="chapter-meta">P.39–44<br/>06 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="39" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第39页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p39.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="40" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第40页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p40.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="41" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第41页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p41.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="42" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第42页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p42.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="43" data-sequence="5" data-source="portfolio-1023"><img alt="作品集1023 · 第43页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p43.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="44" data-sequence="6" data-source="portfolio-1023"><img alt="作品集1023 · 第44页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p44.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="03" id="ceramic-chapter-3">
+<header class="chapter-band rt">
+<div class="chapter-no">03</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">空间</span><span class="label-secondary" lang="en">Space</span></h3>
+<div class="chapter-meta">P.45–49<br/>05 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="45" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第45页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p45.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="46" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第46页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p46.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="47" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第47页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p47.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="48" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第48页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p48.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="49" data-sequence="5" data-source="portfolio-1023"><img alt="作品集1023 · 第49页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p49.webp" width="2400"/></figure></div>
+</section>
+</div></div>
+</div>
+</section>
+<section class="project" data-project-theme="gee" id="gee" style="--project-color:#D6FF3D;--project-paper:#F7FFDC;--project-on:#151811">
+<div class="p-header">
+<div aria-hidden="true" class="p-wordmark">The GEE Project</div>
+<div class="p-num">05</div>
+<div class="p-kicker"><span class="cn">项目档案</span><span class="en">Project Archive</span></div>
+<div class="p-cover"><img alt="GEE计划项目封面" data-source-page="50" height="565" src="assets/1023/covers/gee.webp" width="1600"/></div>
+<h2 class="p-title" tabindex="-1"><span class="cn">GEE计划</span><span class="en">The GEE Project</span></h2>
+<div class="p-subtitle"><span class="cn">毕业季校园服务设计</span><span class="en">Graduation Season Campus Service Design</span></div>
+<div class="p-tags"><span class="ptag"><span class="cn">服务设计</span><span class="en">Service Design</span></span></div>
+</div>
+<div class="p-body">
+<div class="p-intro">
+<div class="p-intro-col">
+<div class="col-hd rt"><span class="cn">项目简介</span><span class="en">Introduction</span></div>
+<div class="col-text cn"><p class="rt">GEE计划是一套综合服务体系，旨在解决大学生毕业季个人物品过多、处理方式繁杂的问题。该体系包括一个多功能APP和配套的硬件设施。APP集成了邮寄服务、二手物品置换等功能，方便学生毕业季快速处理个人物品。</p>
+<p class="rt">用户可通过APP一键下单邮寄、发布和浏览申请置换箱，或预览校园内即将举行的跳蚤市场。线下置换箱的设计，提供了安全、便捷、快速的物品置换解决方案。通过这套服务体系，我们希望减轻学生毕业季的负担。</p></div>
+<div class="col-text en"><p class="rt">The GEE Project is a comprehensive service system solving the problem of excessive belongings during graduation season. It includes a multi-function app with mailing and exchange services, paired with physical exchange boxes on campus — lightening the burden of graduation.</p></div>
+</div>
+<div class="p-intro-col p-intro-right">
+<div class="col-hd rt"><span class="cn">核心概念</span><span class="en">Core Concept</span></div>
+<div class="col-text cn"><p class="rt">GEE计划是一套综合服务体系，旨在解决大学生毕业季个人物品过多、处理方式繁杂的问题。该体系包括一个多功能APP和配套的硬件设施。APP集成了邮寄服务、二手物品置换等功能，方便学生毕业季快速处理个人物品。</p></div>
+<div class="col-text en"><p class="rt">The GEE Project is a comprehensive service system solving the problem of excessive belongings during graduation season. It includes a multi-function app with mailing and exchange services, paired with physical exchange boxes on campus — lightening the burden of graduation.</p></div>
+</div>
+</div>
+<div class="p-sections">
+<div class="project-media">
+<div class="section-index rt">
+<span class="section-index-label"><span class="cn">项目分类</span><span class="en">Project Index</span></span>
+<a class="section-chip" href="#gee-chapter-1"><span class="chip-label"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></span><b>01</b></a><a class="section-chip" href="#gee-chapter-2"><span class="chip-label"><span class="label-primary" lang="zh-CN">服务设计</span><span class="label-secondary" lang="en">Service</span></span><b>02</b></a>
+</div>
+<section class="project-chapter keynote-chapter" data-section-order="01" id="gee-chapter-1">
+<header class="chapter-band rt">
+<div class="chapter-no">01</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">项目简介</span><span class="label-secondary" lang="en">Introduction</span></h3>
+<div class="chapter-meta">P.51<br/>01 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="51" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第51页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p51.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="02" id="gee-chapter-2">
+<header class="chapter-band rt">
+<div class="chapter-no">02</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">服务设计</span><span class="label-secondary" lang="en">Service</span></h3>
+<div class="chapter-meta">P.52–53<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="52" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第52页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p52.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="53" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第53页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p53.webp" width="2400"/></figure></div>
+</section>
+</div></div>
+</div>
+</section>
+<section class="project" data-project-theme="unbounded" id="unbounded" style="--project-color:#795EFF;--project-paper:#F1EEFF;--project-on:#FFFFFF">
+<div class="p-header">
+<div aria-hidden="true" class="p-wordmark">Unbounded Theatrical Gathering</div>
+<div class="p-num">06</div>
+<div class="p-kicker"><span class="cn">项目档案</span><span class="en">Project Archive</span></div>
+<div class="p-cover"><img alt="无界的剧集项目封面" data-source-page="54" height="1200" src="assets/1023/covers/unbounded.webp" width="1600"/></div>
+<h2 class="p-title" tabindex="-1"><span class="cn">无界的剧集</span><span class="en">Unbounded Theatrical Gathering</span></h2>
+<div class="p-subtitle"><span class="cn">城市焕新 &amp; 社区剧场</span><span class="en">Urban Renewal &amp; Community Theater</span></div>
+<div class="p-tags"><span class="ptag"><span class="cn">创意策划</span><span class="en">Creative Planning</span></span><span class="ptag"><span class="cn">展陈设计</span><span class="en">Exhibition Design</span></span><span class="ptag"><span class="cn">视觉设计</span><span class="en">Visual Design</span></span></div>
+</div>
+<div class="p-body">
+<div class="p-intro">
+<div class="p-intro-col">
+<div class="col-hd rt"><span class="cn">项目简介</span><span class="en">Introduction</span></div>
+<div class="col-text cn"><p class="rt">解决问题的总策略模式是从社区剧场到剧场社区。社区剧场是一个以社区作为实践点的戏剧活动，将戏剧文化融入社区的日常生活中，使社区成为一个文化生产自更新的剧场社区。</p>
+<p class="rt">策略以一系列社会行动为核心，将人作为驱动，事作为统筹，物作为媒介，场作为载体。</p>
+<p class="rt">我们的社会行动以杭州良渚区域为主要阵地。首先，我们在校园内展开了剧本围读、杭州高校剧社对话、戏剧创排展演等活动。接着，我们将这些在校园内创排的内容带到了大屋顶和玉鸟集，并招募社会人士一起参与围读与讨论，进行剧本再创作。最后，在未来之光，我们将开展为期一个月的社区剧场项目，与社区居民共同创作戏剧。</p></div>
+<div class="col-text en"><p class="rt">The strategy moves from "community theater" to "theater community" — embedding theatrical culture into daily neighborhood life.</p>
+<p class="rt">Our social actions center on Hangzhou's Liangzhu area, from campus script readings and drama dialogues to public performances and a month-long community theater project co-created with residents.</p></div>
+</div>
+<div class="p-intro-col p-intro-right">
+<div class="col-hd rt"><span class="cn">核心概念</span><span class="en">Core Concept</span></div>
+<div class="col-text cn"><p class="rt">解决问题的总策略模式是从社区剧场到剧场社区。社区剧场是一个以社区作为实践点的戏剧活动，将戏剧文化融入社区的日常生活中，使社区成为一个文化生产自更新的剧场社区。</p></div>
+<div class="col-text en"><p class="rt">The strategy moves from "community theater" to "theater community" — embedding theatrical culture into daily neighborhood life.</p></div>
+</div>
+</div>
+<div class="p-sections">
+<div class="project-media">
+<div class="section-index rt">
+<span class="section-index-label"><span class="cn">项目分类</span><span class="en">Project Index</span></span>
+<a class="section-chip" href="#unbounded-chapter-1"><span class="chip-label"><span class="label-primary" lang="zh-CN">策划</span><span class="label-secondary" lang="en">Curating</span></span><b>02</b></a><a class="section-chip" href="#unbounded-chapter-2"><span class="chip-label"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></span><b>04</b></a><a class="section-chip" href="#unbounded-chapter-3"><span class="chip-label"><span class="label-primary" lang="zh-CN">空间</span><span class="label-secondary" lang="en">Space</span></span><b>04</b></a>
+</div>
+<section class="project-chapter keynote-chapter" data-section-order="01" id="unbounded-chapter-1">
+<header class="chapter-band rt">
+<div class="chapter-no">01</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">策划</span><span class="label-secondary" lang="en">Curating</span></h3>
+<div class="chapter-meta">P.55–56<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="55" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第55页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p55.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="56" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第56页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p56.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="02" id="unbounded-chapter-2">
+<header class="chapter-band rt">
+<div class="chapter-no">02</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">视觉</span><span class="label-secondary" lang="en">Visual</span></h3>
+<div class="chapter-meta">P.57–60<br/>04 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="57" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第57页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p57.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="58" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第58页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p58.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="59" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第59页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p59.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="60" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第60页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p60.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="03" id="unbounded-chapter-3">
+<header class="chapter-band rt">
+<div class="chapter-no">03</div>
+<h3 class="chapter-title"><span class="label-primary" lang="zh-CN">空间</span><span class="label-secondary" lang="en">Space</span></h3>
+<div class="chapter-meta">P.61–64<br/>04 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="61" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第61页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p61.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="62" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第62页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p62.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="63" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第63页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p63.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="64" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第64页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides_layout/p64.webp" width="2400"/></figure></div>
+</section>
+</div></div>
+</div>
+</section>
+<section class="project" data-project-theme="liangzhu" id="liangzhu" style="--project-color:#C4653A;--project-paper:#FFF0E8;--project-on:#FFFFFF">
+<div class="p-header">
+<div aria-hidden="true" class="p-wordmark">Liangzhu Series</div>
+<div class="p-num">07</div>
+<div class="p-kicker"><span class="cn">项目档案</span><span class="en">Project Archive</span></div>
+<div class="p-cover"><img alt="良渚系列项目封面" data-source-page="66" height="900" src="assets/1023/covers/liangzhu.webp" width="1600"/></div>
+<h2 class="p-title" tabindex="-1"><span class="cn">良渚系列</span><span class="en">Liangzhu Series</span></h2>
+<div class="p-subtitle"><span class="cn">良渚文化与当代造物展 · 良渚文创展卖会</span><span class="en">Civilization Exhibition &amp; Cultural Creative Products</span></div>
+<div class="p-tags"><span class="ptag"><span class="cn">展陈设计</span><span class="en">Exhibition Design</span></span><span class="ptag"><span class="cn">视觉设计</span><span class="en">Visual Design</span></span></div><div class="p-client rt"><span class="cn">委托方 | 中国美术学院·工业设计学院 / 杭州良渚遗址管理区管理委员会 / 浙江省文化广电和旅游厅 / 杭州市人民政府</span><span class="en">Client | 中国美术学院·工业设计学院 / 杭州良渚遗址管理区管理委员会 / 浙江省文化广电和旅游厅 / 杭州市人民政府</span></div>
+</div>
+<div class="p-body">
+<div class="p-intro">
+<div class="p-intro-col">
+<div class="col-hd rt"><span class="cn">项目简介</span><span class="en">Introduction</span></div>
+<div class="col-text cn"><p class="rt">2026年米兰国际家具展暨米兰设计周，本次展览邀请中国当代具有创造力的设计师和艺术家们，以良渚文化为母题，用当代的创作思维和造物智慧，以一批作品重新诠释东方"理想国"的诞生、辉煌与其当代的启示。</p>
+<p class="rt">良渚文创是聚焦良渚文化的创意演绎，我们通过跨界融合数字科技、互动体验、非遗艺术等多种形式，找寻良渚文化和当代生活的契合点，以"千年一日的感知"作为设计的主题，通过文创产品让古老文明"可观、可触、可品、可感"，用良渚文创品牌讲中华文明故事。</p></div>
+<div class="col-text en"><p class="rt">At the 2026 Milan Design Week, designers and artists reinterpret the Oriental "Utopia" through the lens of Liangzhu civilization.</p>
+<p class="rt">Liangzhu Cultural Creative blends digital technology, interactive experiences, and intangible heritage — making ancient civilization "seeable, touchable, tastable, and feelable" through design.</p></div>
+</div>
+<div class="p-intro-col p-intro-right">
+<div class="col-hd rt"><span class="cn">核心概念</span><span class="en">Core Concept</span></div>
+<div class="col-text cn"><p class="rt">2026年米兰国际家具展暨米兰设计周，本次展览邀请中国当代具有创造力的设计师和艺术家们，以良渚文化为母题，用当代的创作思维和造物智慧，以一批作品重新诠释东方"理想国"的诞生、辉煌与其当代的启示。</p></div>
+<div class="col-text en"><p class="rt">At the 2026 Milan Design Week, designers and artists reinterpret the Oriental "Utopia" through the lens of Liangzhu civilization.</p></div>
+</div>
+</div>
+<div class="p-sections">
+<div class="project-media">
+<div class="section-index rt">
+<span class="section-index-label"><span class="cn">项目分类</span><span class="en">Project Index</span></span>
+<a class="section-chip" href="#liangzhu-chapter-1"><span class="chip-label"><span class="label-primary">A 良渚文化与当代造物展</span></span><b>02</b></a><a class="section-chip" href="#liangzhu-chapter-2"><span class="chip-label"><span class="label-primary">B 良渚文创展卖会</span></span><b>03</b></a>
+</div>
+<section class="project-chapter keynote-chapter" data-section-order="01" id="liangzhu-chapter-1">
+<header class="chapter-band rt">
+<div class="chapter-no">01</div>
+<h3 class="chapter-title"><span class="label-primary">A 良渚文化与当代造物展</span></h3>
+<div class="chapter-meta">P.66–67<br/>02 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="66" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第66页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p66.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="67" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第67页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p67.webp" width="2400"/></figure></div>
+</section>
+<section class="project-chapter keynote-chapter" data-section-order="02" id="liangzhu-chapter-2">
+<header class="chapter-band rt">
+<div class="chapter-no">02</div>
+<h3 class="chapter-title"><span class="label-primary">B 良渚文创展卖会</span></h3>
+<div class="chapter-meta">P.68–70<br/>03 PAGES</div>
+</header>
+<div class="chapter-body keynote-pages"><figure class="keynote-page ri" data-page="68" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第68页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p68.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="69" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第69页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p69.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="70" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第70页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p70.webp" width="2400"/></figure></div>
+</section>
+</div></div>
+</div>
+</section></div>
+<section class="graphic" id="graphic">
+<div class="graphic-title rt"><span class="cn">平面设计集</span><span class="en">Graphic Design</span></div>
+<div class="graphic-sub rt">Poster · Brand · Logo</div>
+<div class="sub-block"><div class="sub-label rt">A 海报设计 Poster Design</div><div class="sub-gallery keynote-pages keynote-appendix"><figure class="keynote-page ri" data-page="72" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第72页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p72.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="73" data-sequence="2" data-source="portfolio-1023"><img alt="作品集1023 · 第73页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p73.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="74" data-sequence="3" data-source="portfolio-1023"><img alt="作品集1023 · 第74页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p74.webp" width="2400"/></figure>
+<figure class="keynote-page ri" data-page="75" data-sequence="4" data-source="portfolio-1023"><img alt="作品集1023 · 第75页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p75.webp" width="2400"/></figure></div></div><div class="sub-block"><div class="sub-label rt">B 品牌手册 Brand Brochure</div><div class="sub-gallery keynote-pages keynote-appendix"><figure class="keynote-page ri" data-page="76" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第76页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p76.webp" width="2400"/></figure></div></div><div class="sub-block"><div class="sub-label rt">C 标识设计 Logo Design</div><div class="sub-gallery keynote-pages keynote-appendix"><figure class="keynote-page ri" data-page="77" data-sequence="1" data-source="portfolio-1023"><img alt="作品集1023 · 第77页" decoding="async" height="1350" loading="lazy" src="assets/1023/slides/p77.webp" width="2400"/></figure></div></div>
+</section>
+<footer class="footer" id="contact">
+<div class="f-inner">
+<div class="f-title rt"><span class="cn">期待<span class="green">合作</span></span><span class="en">Let's <span class="green">Collaborate</span></span></div>
+<div class="f-grid">
+<div class="f-col rt">
+<h4><span class="cn">联系方式</span><span class="en">Contact</span></h4>
+<p>13812504051</p><p>13812504051@163.com</p><p>WeChat: 13812504051</p>
+</div>
+<div class="f-col rt">
+<h4><span class="cn">导航</span><span class="en">Navigate</span></h4>
+<a href="#top"><span class="cn">返回顶部</span><span class="en">Back to top</span></a>
+<a href="#projects"><span class="cn">全部作品</span><span class="en">All works</span></a>
+</div>
+</div>
+<div class="f-bottom"><span>© 2026 Li Ruichong</span><span>China Academy of Art</span></div>
+</div>
+</footer>
+<div aria-hidden="true" class="project-transition" id="projectTransition">
+<div class="project-transition__veil" id="projectTransitionVeil"></div>
+<div class="project-transition__word" id="projectTransitionWord">ENTER PROJECT</div>
+</div>
+<div aria-hidden="true" class="cursor-ring" id="cursorRing"></div>
+<div aria-hidden="true" class="cursor-dot" id="cursorDot"></div>
+<script src="assets/vendor/gsap-3.12.5.min.js"></script>
+<script src="assets/vendor/ScrollTrigger-3.12.5.min.js"></script>
+<script src="assets/vendor/lenis-1.1.18.min.js"></script>
+<script>
+(function(){
+  'use strict';
+  const lenis=new Lenis({duration:.68,easing:t=>1-Math.pow(1-t,4),smoothWheel:true,wheelMultiplier:1.15});
+  window.__portfolioLenis=lenis;
+  lenis.on('scroll',ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
+  gsap.registerPlugin(ScrollTrigger);
+  const finePointer=window.matchMedia('(any-hover:hover) and (any-pointer:fine)').matches;
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if('scrollRestoration' in history) history.scrollRestoration='manual';
+
+  function syncHeroLanguage(){
+    for(const attr of ['aria-label','alt']){
+      document.querySelectorAll('#top [data-'+attr+'-cn]').forEach(node=>{
+        node.setAttribute(attr,node.getAttribute('data-'+attr+'-'+lang));
+      });
+    }
+  }
+  // Language
+  let lang='cn';
+  const lb=document.getElementById('langBtn');
+  lb.addEventListener('click',()=>{lang=lang==='cn'?'en':'cn';document.documentElement.lang=lang==='en'?'en':'zh-CN';document.body.classList.toggle('lang-en',lang==='en');document.body.classList.toggle('lang-cn',lang==='cn');lb.textContent=lang==='cn'?'EN / 中':'中 / EN';syncHeroLanguage();ScrollTrigger.refresh()});
+
+  // ═══ BADGE → independent editable resume; no scaling distortion ═══
+  let flipped=false;
+  const resumePanel=document.getElementById('resumePanel');
+  const resumeSheet=resumePanel.querySelector('.resume-sheet');
+  function setResume(open){
+    flipped=open;
+    document.getElementById('badge3d').classList.toggle('flipped',open);
+    document.body.classList.toggle('resume-open',open);
+    resumePanel.setAttribute('aria-hidden',open?'false':'true');
+    resumePanel.inert=!open;
+    document.getElementById('badgeStage').setAttribute('aria-expanded',String(open));
+    const h=document.getElementById('badgeHint');
+    if(h) h.style.visibility=open?'hidden':'visible';
+    if(open){
+      const activeCursor=document.getElementById('cursorRing');
+      if(activeCursor){
+        activeCursor.classList.remove('is-project','is-pressed');
+        gsap.set(activeCursor,{opacity:0});
+      }
+      resumeSheet.scrollTop=0;
+      lenis.stop();
+    }else if(!transitioning){
+      lenis.start();
+    }
+  }
+  resumePanel.addEventListener('wheel',e=>e.stopPropagation(),{passive:true});
+  resumePanel.addEventListener('touchmove',e=>e.stopPropagation(),{passive:true});
+  document.getElementById('badgeStage').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setResume(!flipped)}});
+  window.flipBadge=function(){setResume(!flipped)};
+  window.closeResume=function(e){if(e)e.stopPropagation();setResume(false)};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&flipped)setResume(false)});
+
+  // ═══ FIXED CARDS: static concave row, enlarge in place only ═══
+  const cards=document.querySelectorAll('.gcard');
+  const N=cards.length;
+  const ARC=0.04;
+  const center=(N-1)/2;
+
+  function positionCards(){
+  const rootStyle=getComputedStyle(document.documentElement);
+  if(window.innerWidth>600&&window.innerWidth<=900){
+    cards.forEach(card=>{
+      card.style.setProperty('--card-w','140px');
+      card.style.setProperty('--card-rot','0deg');
+      card.style.left='auto';card.style.top='0';
+      card.style.transform='none';card.style.zIndex='auto';card.tabIndex=0;
+    });
+    return;
+  }
+  const preferredStep=parseFloat(rootStyle.getPropertyValue('--card-step'))||196;
+  const preferredWidth=parseFloat(rootStyle.getPropertyValue('--card-w'))||164;
+  const minGap=parseFloat(rootStyle.getPropertyValue('--card-gap'))||30;
+  const edgeReserve=window.innerWidth<=900?30:44;
+  const available=window.innerWidth-edgeReserve*2;
+  const cardWidth=Math.min(preferredWidth,Math.max(48,(available-(N-1)*minGap)/N));
+  const maxStep=N>1?Math.max(0,(available-cardWidth)/(N-1)):0;
+  const step=Math.min(preferredStep,maxStep);
+  cards.forEach((card,i)=>{
+    const offset=i-center;
+    const x=offset*step;
+    const y=-offset*offset*step*ARC;
+    const rot=offset*-1.5;
+    card.style.setProperty('--card-w',`${cardWidth}px`);
+    card.style.left=`calc(50% + ${x}px - var(--card-w)/2)`;
+    card.style.top=`calc(50% + ${y}px)`;
+    card.style.setProperty('--card-rot',`${rot}deg`);
+    card.style.transform=`rotate(${rot}deg)`;
+    card.style.zIndex=`${100-Math.abs(offset)}`;
+    card.tabIndex=0;
+  });
+}
+  positionCards();
+  window.addEventListener('resize',positionCards);
+
+  // ═══ CARD-TO-PROJECT TRANSITION: cover first, reposition invisibly, reveal second ═══
+  const projectTransition=document.getElementById('projectTransition');
+  const transitionVeil=document.getElementById('projectTransitionVeil');
+  const transitionWord=document.getElementById('projectTransitionWord');
+  let transitioning=false;
+  let returningHome=false;
+
+  function returnHome(){
+    if(returningHome||transitioning)return;
+    if(window.scrollY<4){renderHeroProgress(0);revealCardsHome();return}
+    if(reducedMotion){
+      lenis.scrollTo(0,{immediate:true,force:true});
+      renderHeroProgress(0);
+      revealCardsHome();
+      return;
+    }
+    returningHome=true;
+    projectTransition.style.setProperty('--project-color',getComputedStyle(document.documentElement).getPropertyValue('--green'));
+    projectTransition.style.setProperty('--project-on','#111');
+    transitionWord.textContent=lang==='cn'?'返回首页':'BACK HOME';
+    projectTransition.classList.add('is-active');
+    projectTransition.setAttribute('aria-hidden','false');
+    document.body.classList.add('is-transitioning');
+    lenis.stop();
+    gsap.set(transitionVeil,{opacity:0});
+    gsap.set(transitionWord,{opacity:0,y:12});
+    gsap.set(cards,{opacity:0});
+    gsap.timeline({
+      onComplete:()=>{
+        projectTransition.classList.remove('is-active');
+        projectTransition.setAttribute('aria-hidden','true');
+        document.body.classList.remove('is-transitioning');
+        lenis.start();
+        lenis.scrollTo(0,{immediate:true,force:true});
+        window.scrollTo(0,0);
+        renderHeroProgress(0);
+        gsap.to(cards,{opacity:1,duration:.16,stagger:.018,ease:'power1.out',overwrite:'auto'});
+        ScrollTrigger.update();
+        returningHome=false;
+      }
+    })
+    .to(transitionVeil,{opacity:1,duration:.28,ease:'power2.inOut'})
+    .to(transitionWord,{opacity:1,y:0,duration:.2,ease:'power2.out'},'-=.14')
+    .add(()=>{
+      lenis.scrollTo(0,{immediate:true,force:true});
+      window.scrollTo(0,0);
+      renderHeroProgress(0);
+      document.getElementById('nav').classList.remove('scrolled');
+      document.getElementById('sidebarNav').classList.remove('visible');
+      ScrollTrigger.update();
+    })
+    .to(transitionWord,{opacity:0,y:-10,duration:.18,ease:'power2.in'},'+=.06')
+    .add(()=>revealCardsHome(),'-=.08')
+    .to(transitionVeil,{opacity:0,duration:.46,ease:'power2.inOut'},'-=.16');
+  }
+
+  function exposeProject(target,projectId){
+    target.querySelectorAll('.rt,.ri').forEach(el=>{
+      el.classList.add('visible');
+      gsap.set(el,{opacity:1,y:0,scale:1});
+    });
+    if(location.hash!==`#${projectId}`)history.pushState(null,'',`#${projectId}`);
+    ScrollTrigger.refresh();
+    for(let attempt=0;attempt<4;attempt+=1){
+      const delta=target.getBoundingClientRect().top;
+      if(Math.abs(delta)<1)break;
+      lenis.scrollTo(window.scrollY+delta,{immediate:true,force:true});
+      ScrollTrigger.update();
+    }
+    const heading=target.querySelector('.p-title');
+    if(heading) heading.focus({preventScroll:true});
+  }
+
+  function openProject(card){
+    if(transitioning)return;
+    const projectId=card.dataset.project;
+    const target=document.getElementById(projectId);
+    const source=card.querySelector('.gcard-glass');
+    if(!target||!source)return;
+    const activeCursor=document.getElementById('cursorRing');
+    if(activeCursor){
+      activeCursor.classList.remove('is-project','is-pressed');
+      gsap.set(activeCursor,{opacity:0});
+    }
+
+    if(reducedMotion){
+      exposeProject(target,projectId);
+      return;
+    }
+
+    transitioning=true;
+    const rect=source.getBoundingClientRect();
+    const style=getComputedStyle(card);
+    const clone=source.cloneNode(true);
+    clone.classList.add('project-transition__card');
+    clone.style.left=`${rect.left}px`;
+    clone.style.top=`${rect.top}px`;
+    clone.style.width=`${rect.width}px`;
+    clone.style.height=`${rect.height}px`;
+    clone.style.setProperty('--project-color',style.getPropertyValue('--project-color'));
+    clone.style.setProperty('--project-paper',style.getPropertyValue('--project-paper'));
+    clone.style.setProperty('--project-on',style.getPropertyValue('--project-on'));
+    projectTransition.style.setProperty('--project-color',style.getPropertyValue('--project-color'));
+    projectTransition.style.setProperty('--project-on',style.getPropertyValue('--project-on'));
+    transitionWord.textContent=lang==='cn'?'进入项目':'ENTER PROJECT';
+    projectTransition.insertBefore(clone,transitionVeil);
+    projectTransition.classList.add('is-active');
+    projectTransition.setAttribute('aria-hidden','false');
+    document.body.classList.add('is-transitioning');
+    lenis.stop();
+
+    gsap.set(transitionVeil,{opacity:0});
+    gsap.set(transitionWord,{opacity:0,y:12});
+    const transitionTimeline=gsap.timeline({
+      onComplete:()=>{
+        clone.remove();
+        projectTransition.classList.remove('is-active');
+        projectTransition.setAttribute('aria-hidden','true');
+        document.body.classList.remove('is-transitioning');
+        projectTransition._timeline=null;
+        lenis.start();
+        transitioning=false;
+      }
+    });
+    projectTransition._timeline=transitionTimeline;
+    transitionTimeline
+    .to(clone,{left:0,top:0,width:window.innerWidth,height:window.innerHeight,borderRadius:0,duration:.72,ease:'power2.inOut'})
+    .to(transitionVeil,{opacity:1,duration:.28,ease:'power2.inOut'},'-=.2')
+    .to(transitionWord,{opacity:1,y:0,duration:.24,ease:'power2.out'},'-=.18')
+    .add(()=>exposeProject(target,projectId),'swap')
+    .to(clone,{opacity:0,duration:.2,ease:'power2.out'},'swap')
+    .to(transitionWord,{opacity:0,y:-10,duration:.2,ease:'power2.in'},'swap+=.16')
+    .to(transitionVeil,{opacity:0,duration:.58,ease:'power2.inOut'},'swap+=.2');
+  }
+
+  cards.forEach(card=>{
+    card.addEventListener('click',()=>openProject(card));
+    card.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();openProject(card)}
+    });
+  });
+
+  // Smooth anchors — use a masked reset for the very long return to the homepage.
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const href=a.getAttribute('href');
+      if(href==='#top'){returnHome();return}
+      const t=document.querySelector(href);
+      if(t)lenis.scrollTo(t,{offset:-(document.getElementById('nav').getBoundingClientRect().height+16),duration:.72});
+    });
+  });
+  window.addEventListener('popstate',()=>{
+    const id=location.hash.slice(1);
+    if(!id||id==='top'){returnHome();return}
+    const target=document.getElementById(id);
+    if(target)lenis.scrollTo(target,{offset:0,duration:.82,force:true});
+  });
+
+  // ─── ENTRANCE — animate containers only so card transforms remain stable ───
+  const tl=gsap.timeline({delay:0.12});
+  tl.fromTo('.hero-title',{y:-30,opacity:0},{y:0,opacity:1,duration:.65,ease:'power2.out'});
+  tl.fromTo('#badgeColumn',{y:-260,opacity:0},{y:0,opacity:1,duration:.85,ease:'power3.out'},'-.25');
+  tl.fromTo('#carouselWrap',{y:100,opacity:0},{y:0,opacity:1,duration:.72,ease:'power3.out'},'-.42');
+  tl.fromTo('#badgeHint',{opacity:0},{opacity:1,duration:.3},'-.2');
+  tl.fromTo('#scrollCue',{opacity:0},{opacity:.5,duration:.3},'-.2');
+
+  // ─── HERO EXIT ON SCROLL — continuously reversible without abrupt resets ───
+  function renderHeroProgress(p){
+    const heroOpacity=Math.max(0,1-p*1.7);
+    gsap.set('#badgeColumn',{y:-p*360,rotationX:p*32,opacity:heroOpacity,visibility:'visible'});
+    gsap.set('#carouselWrap',{y:-p*260,opacity:heroOpacity,visibility:'visible'});
+    gsap.set('#heroTitle',{y:-p*90,opacity:Math.max(0,1-p*1.8),visibility:'visible'});
+    gsap.set('#scrollCue',{opacity:Math.max(0,.5-p*2)});
+  }
+  function revealCardsHome(){
+    gsap.killTweensOf(cards);
+    gsap.fromTo(cards,{opacity:.08},{opacity:1,duration:.52,stagger:.045,ease:'power2.out',overwrite:'auto'});
+  }
+  ScrollTrigger.create({
+    trigger:'.hero-scene',start:'top top',end:'+=60%',pin:true,scrub:.35,
+    onUpdate:self=>renderHeroProgress(self.progress),
+    onLeaveBack:()=>{renderHeroProgress(0);revealCardsHome()},
+    onRefresh:self=>{if(self.progress<.012)renderHeroProgress(self.progress)}
+  });
+
+  // Nav scroll state
+  ScrollTrigger.create({
+    trigger:'#projects',start:'top 80px',
+    onEnter:()=>document.getElementById('nav').classList.add('scrolled'),
+    onLeaveBack:()=>document.getElementById('nav').classList.remove('scrolled')
+  });
+
+  // ═══ SIDEBAR NAV ═══
+  const sidebar=document.getElementById('sidebarNav');
+  const sbItems=document.querySelectorAll('.sb-item');
+
+  ScrollTrigger.create({
+    trigger:'#projects',start:'top 60%',
+    onEnter:()=>sidebar.classList.add('visible'),
+    onLeaveBack:()=>sidebar.classList.remove('visible')
+  });
+
+  const sidebarTargets=[...sbItems].map(item=>document.getElementById(item.dataset.target));
+  sidebarTargets.forEach((sec,i)=>{
+    if(!sec)return;
+    ScrollTrigger.create({trigger:sec,start:'top 50%',end:'bottom 50%',onEnter:()=>setActive(i),onEnterBack:()=>setActive(i)});
+  });
+  function setActive(idx){
+    sbItems.forEach((item,i)=>{
+      item.classList.toggle('active',i===idx);
+      if(i===idx)item.setAttribute('aria-current','location');else item.removeAttribute('aria-current');
+    });
+    const section=sidebarTargets[idx];
+    if(section)sidebar.style.setProperty('--active-project-color',getComputedStyle(section).getPropertyValue('--project-color')||'#82F046');
+  }
+
+  // Reveals
+  ScrollTrigger.batch('.rt',{start:'top 88%',onEnter:b=>b.forEach((e,i)=>gsap.to(e,{opacity:1,y:0,duration:.7,delay:i*.06,ease:'power2.out'}))});
+  ScrollTrigger.batch('.ri',{start:'top 88%',onEnter:b=>b.forEach((e,i)=>gsap.to(e,{opacity:1,y:0,scale:1,duration:.8,delay:i*.05,ease:'power2.out'}))});
+
+  // ═══ PLAYFUL CURSOR + PAGE-WIDE PARALLAX ═══
+  // CSS translate owns parallax; transform remains available to card rotation and reveal motion.
+  if(finePointer){
+    document.body.classList.add('has-playful-cursor');
+    const cursorRing=document.getElementById('cursorRing');
+    const cursorDot=document.getElementById('cursorDot');
+    let cursorX=-100,cursorY=-100,cursorFrame=0;
+    function paintCursor(){
+      cursorRing.style.left=`${cursorX}px`;
+      cursorRing.style.top=`${cursorY}px`;
+      cursorDot.style.left=`${cursorX}px`;
+      cursorDot.style.top=`${cursorY}px`;
+      cursorFrame=0;
+    }
+    function moveCursor(x,y){
+      cursorX=x;cursorY=y;
+      if(!cursorFrame)cursorFrame=requestAnimationFrame(paintCursor);
+    }
+    const motionCards=[...document.querySelectorAll('.gcard,.resume-sheet,.p-intro-col,.gal-item')];
+    const visibleCards=new Set();
+    let targetX=0,targetY=0,currentX=0,currentY=0,rafId=0;
+
+    motionCards.forEach((el,i)=>{
+      let strength=14+(i%3)*2;
+      if(el.classList.contains('gcard')){
+        const cardIndex=Number(el.dataset.idx);
+        const edgeDistance=Math.abs(cardIndex-center);
+        strength=Math.max(8,24-edgeDistance*5);
+      }else if(el.classList.contains('resume-sheet')) strength=20;
+      else if(el.classList.contains('p-intro-col')) strength=17+(i%2)*3;
+      el.dataset.motionStrength=String(strength);
+    });
+
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>entry.isIntersecting?visibleCards.add(entry.target):visibleCards.delete(entry.target));
+      startMotion();
+    },{rootMargin:'120px 0px',threshold:0});
+    motionCards.forEach(el=>io.observe(el));
+
+    const badgeRotY=gsap.quickTo('#badgeWrapper','rotationY',{duration:.38,ease:'power3.out'});
+    const badgeRotX=gsap.quickTo('#badgeWrapper','rotationX',{duration:.38,ease:'power3.out'});
+    const titleX=gsap.quickTo('#heroTitle h1','x',{duration:.55,ease:'power3.out'});
+    const titleY=gsap.quickTo('#heroTitle h1','y',{duration:.55,ease:'power3.out'});
+
+    function renderMotion(){
+      currentX+=(targetX-currentX)*.14;
+      currentY+=(targetY-currentY)*.14;
+      visibleCards.forEach(el=>{
+        const strength=Number(el.dataset.motionStrength)||14;
+        el.style.setProperty('--mouse-x',`${(currentX*strength).toFixed(2)}px`);
+        el.style.setProperty('--mouse-y',`${(currentY*strength*.62).toFixed(2)}px`);
+      });
+      if(Math.abs(targetX-currentX)>.002||Math.abs(targetY-currentY)>.002) rafId=requestAnimationFrame(renderMotion);
+      else rafId=0;
+    }
+    function startMotion(){if(!rafId)rafId=requestAnimationFrame(renderMotion)}
+    function resetMotion(){
+      targetX=0;targetY=0;startMotion();
+      badgeRotY(0);badgeRotX(0);titleX(0);titleY(0);
+      cursorRing.classList.remove('is-project','is-pressed');
+      gsap.to([cursorRing,cursorDot],{opacity:0,duration:.18,overwrite:true});
+    }
+    function updateCursorState(target){
+      const card=target.closest&&target.closest('.gcard');
+      cursorRing.classList.toggle('is-project',Boolean(card));
+      if(card){
+        const style=getComputedStyle(card);
+        cursorRing.style.setProperty('--cursor-accent',style.getPropertyValue('--project-color'));
+        cursorRing.style.setProperty('--cursor-on',style.getPropertyValue('--project-on'));
+      }
+    }
+
+    window.addEventListener('pointermove',e=>{
+      targetX=reducedMotion?0:(e.clientX/window.innerWidth-.5)*2;
+      targetY=reducedMotion?0:(e.clientY/window.innerHeight-.5)*2;
+      moveCursor(e.clientX,e.clientY);
+      gsap.set([cursorRing,cursorDot],{opacity:1});
+      updateCursorState(e.target);
+      if(!reducedMotion&&!flipped){badgeRotY(targetX*12);badgeRotX(-targetY*8)}
+      if(!reducedMotion){titleX(targetX*16);titleY(targetY*10);startMotion()}
+    },{passive:true});
+    window.addEventListener('pointerdown',()=>cursorRing.classList.add('is-pressed'),{passive:true});
+    window.addEventListener('pointerup',()=>cursorRing.classList.remove('is-pressed'),{passive:true});
+    document.documentElement.addEventListener('mouseleave',resetMotion);
+    window.addEventListener('blur',resetMotion);
+  }
+
+  ScrollTrigger.refresh();
+})();
+</script>
+</body>
+</html>
